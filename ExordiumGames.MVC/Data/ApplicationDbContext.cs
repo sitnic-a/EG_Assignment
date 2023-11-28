@@ -7,7 +7,7 @@ using System.Reflection.Emit;
 
 namespace ExordiumGames.MVC.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
@@ -22,17 +22,18 @@ namespace ExordiumGames.MVC.Data
 
         private void SeedUsers(ModelBuilder builder)
         {
-            IdentityUser user = new IdentityUser()
+            User user = new User()
             {
                 Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                 UserName = "Admin",
-                Email = "admin@gmail.com"
+                Email = "admin@gmail.com",
+                Title = "Admin"
             };
 
             PasswordHasher<IdentityUser> passwordHasher = new PasswordHasher<IdentityUser>();
             var hash = passwordHasher.HashPassword(user, "Admin123!");
             user.PasswordHash = hash;
-            builder.Entity<IdentityUser>().HasData(user);
+            builder.Entity<User>().HasData(user);
         }
 
         private void SeedRoles(ModelBuilder builder)
