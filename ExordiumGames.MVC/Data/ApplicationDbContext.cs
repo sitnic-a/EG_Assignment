@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using ExordiumGames.MVC.Data.DbModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Hosting;
-using System.Reflection.Emit;
-
 namespace ExordiumGames.MVC.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
@@ -12,6 +9,10 @@ namespace ExordiumGames.MVC.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Retailer> Retailers { get; set; }
+        public DbSet<Item> Items { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
