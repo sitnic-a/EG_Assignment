@@ -2,12 +2,10 @@
 using ExordiumGames.MVC.Data.DbModels;
 using ExordiumGames.MVC.Services;
 using ExordiumGames.MVC.Utils.Parsers;
-using ExordiumGames.MVC.Utils.Parsers.Classes;
+using ExordiumGames.MVC.Utils.Parsers.XMLModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NuGet.Protocol;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,12 +17,16 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //Custom services
 builder.Services.AddTransient<IEmployeeService<Category, Item, Retailer>, EmployeeService>();
+builder.Services.AddTransient<IPopulateDBService, PopulateDBService>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+var _context = builder.Services.BuildServiceProvider().GetRequiredService<ApplicationDbContext>();
+PopulateDBService populateDB = new PopulateDBService(_context);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -50,13 +52,10 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-XMLToJsonParser parser = new XMLToJsonParser();
-var jsonCategory = parser.Convert("Utils\\Parsers\\categories.xml");
-var jsonItems = parser.Convert("Utils\\Parsers\\items.xml");
-var jsonRetailers = parser.Convert("Utils\\Parsers\\retailers.xml");
-var dataCategories = JsonConvert.DeserializeObject<CategoriesXML>(jsonCategory);
-var dataItems = JsonConvert.DeserializeObject<ItemsXML>(jsonItems);
-var dataRetailers = JsonConvert.DeserializeObject<RetailersXML>(jsonRetailers);
+
+
+
+
 /* 1) Seed roles
 
    2) Seed one user - Admin

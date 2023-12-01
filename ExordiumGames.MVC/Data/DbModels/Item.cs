@@ -22,9 +22,9 @@ namespace ExordiumGames.MVC.Data.DbModels
         public decimal Price { get; set; } = decimal.Zero;
         
         [JsonProperty("Nazivretailera")]
-        public string RetailerName { get; set; }=string.Empty;
+        public string? RetailerName { get; set; }=string.Empty;
         
-        public int RetailerId { get; set; }
+        public int? RetailerId { get; set; }
         
         [JsonIgnore]
         public Retailer Retailer { get; set; }
