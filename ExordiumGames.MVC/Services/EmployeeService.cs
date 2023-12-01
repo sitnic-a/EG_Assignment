@@ -1,5 +1,6 @@
 ﻿using ExordiumGames.MVC.Data;
 using ExordiumGames.MVC.Data.DbModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExordiumGames.MVC.Services
 {
@@ -12,6 +13,12 @@ namespace ExordiumGames.MVC.Services
         {
             _context = context;
             _employeeLogger = employeeLogger;
+        }
+
+        public async Task<List<Item>> GetItems()
+        {
+            var result = await _context.Items.ToListAsync();
+            return result;
         }
 
         public async Task<Category> AddAsyncCategory(Category Entity)
@@ -70,6 +77,8 @@ namespace ExordiumGames.MVC.Services
             }
             return new Retailer();
         }
+
+
 
         public async Task<Category> UpdateAsyncCategory(int id, Category Entity)
         {

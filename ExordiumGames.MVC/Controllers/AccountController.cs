@@ -12,9 +12,10 @@ namespace ExordiumGames.MVC.Controllers
         {
             _employeeService = employeeService;
         }
-        public IActionResult CreateCategory()
+        public async Task<IActionResult> CreateCategory()
         {
-            return View();
+            var items = await _employeeService.GetItems();
+            return View(items);
         }
         public IActionResult CreateItem()
         {

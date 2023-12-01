@@ -4,6 +4,9 @@
                                                                    where TItem : class
                                                                    where TRetailer : class
     {
+        Task<List<TItem>> GetItems();
+        //Task<TCategory> GetCategoryById();
+
         Task<TCategory> AddAsyncCategory(TCategory Entity);
         Task<TCategory> DeleteAsyncCategory(int id);
         Task<TCategory> UpdateAsyncCategory(int id, TCategory Entity);

@@ -24,49 +24,26 @@
             <label for="Priority">Priority:</label><br />
             <input type="number" min="0" max="5" id="Priority" name="Priority" class="form-control" />
         </div>
-        <br/> <br />
-        <div class="items-container" >
-            @for(int i=0; i<5; i++)
+        <br /> <br />
+        <div class="items-container">
+            @foreach (var item in @Model)
             {
-                <div class="item">
+                <div class="item form-control">
+                    <input class="item-checkbox" type="checkbox" />
                     <div>
-                        <label for="ItemName">Item Name:</label><br />
-                        <input type="text" id="ItemName" name="ItemName" placeholder="Enter item name.." class="form-control" />
+                        <p>@item.Name</p>
+                        <p>@item.RetailerName</p>
                     </div>
                     <div>
-                        <label for="ItemDescription">Item Description:</label><br />
-                        <textarea id="ItemDescription" name="ItemDescription" placeholder="Enter description" cols="10" rows="5" class="form-control"></textarea>
+                        <p>@item.Description</p>
                     </div>
                     <div>
-                        <label for="ItemDiscountDate">Item Discount Date:</label><br />
-                        <input type="date" id="ItemDiscountDate" name="ItemDiscountDate" class="form-control" />
+                        <p>@item.DiscountDate</p>
                     </div>
-                    <div>
-                        <label for="ItemImageUrl">Image:</label><br />
-                        <input type="image" id="ItemImageUrl" name="ItemImageUrl" value="Browse" class="form-control" />
-                    </div>
-                    <div>
-                        <label for="ItemPrice">Item Price:</label><br />
-                        <input type="number" id="ItemPrice" name="ItemPrice" placeholder="Enter price.." class="form-control" />
-                    </div>
-                    <div>
-                        <label for="RetailerId">Retailer:</label><br />
-                        <select id="RetailerId" name="ItemRetailerId" class="form-control">
-                            <option name="RetailerId" value="1">Konzum</option>
-                            <option name="RetailerId" value="2">Mercator</option>
-                            <option name="RetailerId" value="3">Vitinka</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="CategoryId">Category:</label><br />
-                        <select id="CategoryId" name="ItemCategoryId" class="form-control">
-                            <option name="CategoryId" value="1">Food</option>
-                            <option name="CategoryId" value="2">Beverage</option>
-                            <option name="CategoryId" value="3">Clothes</option>
-                        </select>
-                    </div>
+                    <img class="image" src="@item.ImageUrl" />
                 </div>
             }
+
         </div>
         <button id="category-add-button" type="submit" class="form-control">Submit</button>
     </form>
