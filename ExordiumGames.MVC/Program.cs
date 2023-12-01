@@ -1,8 +1,13 @@
-using ExordiumGames.MVC.Data;
+﻿using ExordiumGames.MVC.Data;
 using ExordiumGames.MVC.Data.DbModels;
 using ExordiumGames.MVC.Services;
+using ExordiumGames.MVC.Utils.Parsers;
+using ExordiumGames.MVC.Utils.Parsers.Classes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NuGet.Protocol;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +50,13 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+XMLToJsonParser parser = new XMLToJsonParser();
+var jsonCategory = parser.Convert("Utils\\Parsers\\categories.xml");
+var jsonItems = parser.Convert("Utils\\Parsers\\items.xml");
+var jsonRetailers = parser.Convert("Utils\\Parsers\\retailers.xml");
+var dataCategories = JsonConvert.DeserializeObject<CategoriesXML>(jsonCategory);
+var dataItems = JsonConvert.DeserializeObject<ItemsXML>(jsonItems);
+var dataRetailers = JsonConvert.DeserializeObject<RetailersXML>(jsonRetailers);
 /* 1) Seed roles
 
    2) Seed one user - Admin
