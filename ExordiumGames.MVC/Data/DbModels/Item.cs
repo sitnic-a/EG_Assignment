@@ -25,13 +25,13 @@ namespace ExordiumGames.MVC.Data.DbModels
         public string? RetailerName { get; set; }=string.Empty;
         
         public int? RetailerId { get; set; }
-        
+
         [JsonIgnore]
         public Retailer Retailer { get; set; }
         
         [JsonProperty("Kategorija")]
         public int CategoryId { get; set; }
-        
+
         [JsonIgnore]
         public Category Category { get; set; }
 
@@ -50,8 +50,6 @@ namespace ExordiumGames.MVC.Data.DbModels
             Price = price;
             RetailerId = retailerID;
             CategoryId = categoryId;
-            Retailer = new Retailer();
-            Category = new Category();
         }
 
         public Item(int itemId, string name, string description, string discountDate, string imageUrl,decimal price, int?retailerID, int categoryId)
@@ -64,8 +62,6 @@ namespace ExordiumGames.MVC.Data.DbModels
             Price = price;
             RetailerId = retailerID;
             CategoryId = categoryId;
-            Retailer = new Retailer();
-            Category = new Category();
         }
 
     }

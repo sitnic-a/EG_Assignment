@@ -49,7 +49,8 @@ namespace ExordiumGames.MVC.Services
 
         public async Task<Item> AddAsyncItem(Item Entity)
         {
-            var newEntity = await _context.Items.AddAsync(Entity);
+            var item = new Item(Entity.Name, Entity.Description, Entity.DiscountDate, Entity.ImageUrl, Entity.Price, Entity.RetailerId, Entity.CategoryId);
+            var newEntity = await _context.Items.AddAsync(item);
             await _context.SaveChangesAsync();
             return newEntity.Entity;
         }
