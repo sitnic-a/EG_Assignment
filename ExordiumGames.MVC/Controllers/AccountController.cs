@@ -14,6 +14,29 @@ namespace ExordiumGames.MVC.Controllers
         {
             _employeeService = employeeService;
         }
+
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = await _employeeService.GetCategories();
+            return View(categories);
+        }
+
+        public async Task<IActionResult> GetItems()
+        {
+            var items = await _employeeService.GetItems();
+            return View(items);
+        }
+
+        public async Task<IActionResult> CategoryDetails(int CategoryId)
+        {
+            var category = await _employeeService.GetCategoryById(CategoryId);
+            var categoryItems = _employeeService.GetItems().Result.Where(i => i.CategoryId == CategoryId).ToList();
+
+            ViewBag.CategoryItems = categoryItems;
+
+            return View(category);
+        }
+
         public async Task<IActionResult> CreateCategory()
         {
             var items = await _employeeService.GetItems();
@@ -48,8 +71,21 @@ namespace ExordiumGames.MVC.Controllers
             
             return View();
         }
-        public IActionResult CreateItem()
+        public async Task<IActionResult> CreateItem()
         {
+            var categories = await _employeeService.GetCategories();
+            var retailers = await _employeeService.GetRetailers();
+
+            ViewBag.Categories = categories.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            }).ToList();
+            ViewBag.Retailers = retailers.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            }).ToList();
             return View();
         }
         public IActionResult CreateRetailer()
@@ -77,15 +113,22 @@ namespace ExordiumGames.MVC.Controllers
             await _employeeService.SaveChangesAsync();
             return View(newEntity);
         }
-        public async Task<IActionResult> SaveItem(Item item)
+        public async Task<IActionResult> SaveItem(CreateItemRequestModel itemRequestModel)
         {
+            var item = new Item(itemRequestModel.Name, itemRequestModel.Description, itemRequestModel.DiscountDate, itemRequestModel.ImageUrl, itemRequestModel.Price, itemRequestModel.RetailerId, itemRequestModel.CategoryId);
             var newEntity = await _employeeService.AddAsyncItem(item);
-            return View(newEntity);
+            return RedirectToAction(actionName: "GetItems");
         }
         public async Task<IActionResult> SaveRetailer(Retailer retailer)
         {
             var newEntity = await _employeeService.AddAsyncRetailer(retailer);
             return View(newEntity);
+        }
+
+        public async Task<IActionResult> DeleteItem(int ItemId)
+        {
+            var deletedItem = await _employeeService.DeleteAsyncItem(ItemId);
+            return RedirectToAction(actionName: "GetItems");
         }
 
     }

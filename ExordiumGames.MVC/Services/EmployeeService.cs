@@ -28,6 +28,12 @@ namespace ExordiumGames.MVC.Services
             return result;
         }
 
+        public async Task<Category> GetCategoryById(int id)
+        {
+            var categories = await _context.Categories.FindAsync(id);
+            return categories;
+        }
+
         public async Task<List<Retailer>> GetRetailers()
         {
             var result = await _context.Retailers.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();

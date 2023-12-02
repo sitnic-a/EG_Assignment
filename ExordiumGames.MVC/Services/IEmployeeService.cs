@@ -6,6 +6,7 @@
     {
         Task<List<TItem>> GetItems();
         Task<List<TCategory>> GetCategories();
+        Task<TCategory> GetCategoryById(int id);
         Task<List<TRetailer>> GetRetailers();
         //Task<TCategory> GetCategoryById();
 
