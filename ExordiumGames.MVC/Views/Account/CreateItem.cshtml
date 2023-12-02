@@ -1,0 +1,48 @@
+﻿@model ExordiumGames.MVC.Dto.CreateItemRequestModel
+
+@{
+    List<SelectListItem> retailers = ViewBag.Retailers;
+    List<SelectListItem> categories = ViewBag.Categories;
+}
+<form asp-action="SaveItem" asp-controller="Account">
+    <section>
+        <div>
+            <label for="Name">Item name:</label><br />
+            <input type="text" id="Name" asp-for="Name" placeholder="Enter item name.." class="form-control" required />
+            <input type="hidden" asp-for="Name" />
+        </div>
+        <div>
+            <label for="Description">Description:</label><br />
+            <input type="text" id="Description" asp-for="Description" class="form-control" required />
+            <input type="hidden" asp-for="Description" />
+        </div>
+        <div>
+            <label for="DiscountDate">Discount date:</label><br />
+            <input type="text" id="DiscountDate" asp-for="DiscountDate" placeholder="Enter discount date.." class="form-control" required />
+            <input type="hidden" asp-for="DiscountDate" />
+        </div>
+        <div>
+            <label for="Image">Image:</label><br />
+            <input type="text" asp-for="ImageUrl" class="form-control" required />
+            <input type="hidden" asp-for="ImageUrl" />
+        </div>
+        <div>
+            <label for="Price">Price:</label><br />
+            <input type="text" id="Price" asp-for="Price" placeholder="Enter price.." class="form-control" required />
+            <input type="hidden" asp-for="Price" />
+        </div>
+        <div>
+            <label for="Image">Choose category:</label><br />
+            <select class="form-control" asp-for="CategoryId" asp-items="categories" required>
+                <option>---</option>
+            </select>
+        </div>
+        <div>
+            <label for="Image">Choose retailer:</label><br />
+            <select class="form-control" asp-for="RetailerId" asp-items="retailers" required>
+                <option>---</option>
+            </select>
+        </div>
+    </section>
+    <button type="submit" class="form-control">Submit</button>
+</form>

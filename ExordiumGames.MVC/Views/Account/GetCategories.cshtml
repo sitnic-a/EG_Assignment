@@ -1,0 +1,32 @@
+﻿@model List<ExordiumGames.MVC.Data.DbModels.Category>
+
+<a asp-controller="Account" asp-action="CreateCategory" class="btn btn-primary">Create Category</a>
+<br />
+<section class="categories-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Priority</td>
+                    <td>
+                        <a asp-action="CategoryDetails" 
+                           asp-controller="Account" 
+                           asp-route-CategoryId="@item.Id"
+                           class="btn btn-primary">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,41 @@
+.items-container {
+    width: 90%;
+    display: flex;
+    flex-wrap:wrap;
+    margin: auto;
+}
+
+.item{
+    position:relative;
+    width: 25%;
+    margin: 1rem;
+}
+
+.item-checkbox{
+    position:absolute;
+    right:0;
+    top:0;
+    width:1.5rem;
+    height:1.5rem;
+}
+
+.image {
+    width:250px;
+    height: 400px
+}
+
+.get-items-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.item-container {
+    width: 50%;
+    margin-top: 0.5rem;
+}
+
+img{
+    width: 100px
+}
+

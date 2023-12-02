@@ -1,0 +1,31 @@
+﻿@using ExordiumGames.MVC.Data.DbModels;
+@model ExordiumGames.MVC.Data.DbModels.Category
+
+@{
+    List<Item> categoryItems = ViewBag.CategoryItems;
+}
+
+<section style="width:50%; margin:auto">
+    <div class="form-control">
+        <h3>Category Name: @Model.Name</h3>
+    </div>
+    <br />
+    <div class="form-control">
+        <h3>Priority: @Model.Priority</h3>
+    </div>
+    <br />
+    <div class="items-container">
+        @foreach (var item in categoryItems)
+        {
+            <div class="form-control">
+                <h3>@item.Name</h3>
+                <div>
+                    <p>Discount date: @item.DiscountDate</p>
+                    <p>Price: @item.Price</p>
+                </div>
+
+                <img class="image" src="@item.ImageUrl" />
+            </div>
+        }
+    </div>
+</section>
