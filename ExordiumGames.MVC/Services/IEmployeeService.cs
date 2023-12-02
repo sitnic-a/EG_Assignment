@@ -5,6 +5,8 @@
                                                                    where TRetailer : class
     {
         Task<List<TItem>> GetItems();
+        Task<List<TCategory>> GetCategories();
+        Task<List<TRetailer>> GetRetailers();
         //Task<TCategory> GetCategoryById();
 
         Task<TCategory> AddAsyncCategory(TCategory Entity);
@@ -18,5 +20,7 @@
         Task<TRetailer> AddAsyncRetailer(TRetailer Entity);
         Task<TRetailer> DeleteAsyncRetailer(int id);
         Task<TRetailer> UpdateAsyncRetailer(int id, TRetailer Entity);
+
+        Task SaveChangesAsync();
     }
 }

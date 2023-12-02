@@ -39,7 +39,7 @@ namespace ExordiumGames.MVC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("ExordiumGames.MVC.Data.DbModels.Item", b =>
@@ -84,7 +84,7 @@ namespace ExordiumGames.MVC.Data.Migrations
 
                     b.HasIndex("RetailerId");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("ExordiumGames.MVC.Data.DbModels.Retailer", b =>
@@ -108,7 +108,7 @@ namespace ExordiumGames.MVC.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Retailers");
+                    b.ToTable("Retailers", (string)null);
                 });
 
             modelBuilder.Entity("ExordiumGames.MVC.Data.DbModels.User", b =>

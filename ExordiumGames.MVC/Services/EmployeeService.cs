@@ -1,6 +1,7 @@
 ﻿using ExordiumGames.MVC.Data;
 using ExordiumGames.MVC.Data.DbModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ExordiumGames.MVC.Services
 {
@@ -18,6 +19,18 @@ namespace ExordiumGames.MVC.Services
         public async Task<List<Item>> GetItems()
         {
             var result = await _context.Items.ToListAsync();
+            return result;
+        }
+
+        public async Task<List<Category>> GetCategories()
+        {
+            var result = await _context.Categories.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();
+            return result;
+        }
+
+        public async Task<List<Retailer>> GetRetailers()
+        {
+            var result = await _context.Retailers.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();
             return result;
         }
 
@@ -160,6 +173,11 @@ namespace ExordiumGames.MVC.Services
                 return dbEntity;
             }
             return new Retailer();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

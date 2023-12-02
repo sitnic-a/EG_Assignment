@@ -41,5 +41,19 @@ namespace ExordiumGames.MVC.Data.DbModels
             Category = new Category();
         }
 
+        public Item(int itemId, string name, string description, string discountDate, string imageUrl,decimal price, int?retailerID, int categoryId)
+        {
+            Id = itemId;
+            Name = name;
+            Description = description;
+            DiscountDate = discountDate;
+            ImageUrl = imageUrl;
+            Price = price;
+            RetailerId = retailerID;
+            CategoryId = categoryId;
+            Retailer = new Retailer();
+            Category = new Category();
+        }
+
     }
 }

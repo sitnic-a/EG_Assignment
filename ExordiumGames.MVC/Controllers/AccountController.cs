@@ -1,6 +1,8 @@
 ﻿using ExordiumGames.MVC.Data.DbModels;
+using ExordiumGames.MVC.Dto;
 using ExordiumGames.MVC.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ExordiumGames.MVC.Controllers
 {
@@ -15,7 +17,36 @@ namespace ExordiumGames.MVC.Controllers
         public async Task<IActionResult> CreateCategory()
         {
             var items = await _employeeService.GetItems();
-            return View(items);
+            var categories = await _employeeService.GetCategories();
+            var retailers = await _employeeService.GetRetailers();
+
+            IList<CreateCategoryItemResponseModel> itemsResponseModel = new List<CreateCategoryItemResponseModel>();
+            foreach (var item in items)
+            {
+                itemsResponseModel.Add(new CreateCategoryItemResponseModel(item.Id,
+                    item.Name, 
+                    item.Description, 
+                    item.DiscountDate, 
+                    item.ImageUrl,
+                    item.Price, 
+                    item.RetailerId,
+                    item.CategoryId, 
+                    false));
+            }
+
+            ViewBag.Items = itemsResponseModel;
+            ViewBag.Categories = categories.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            }).ToList();
+            ViewBag.Retailers = retailers.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            }).ToList();
+            
+            return View();
         }
         public IActionResult CreateItem()
         {
@@ -26,10 +57,24 @@ namespace ExordiumGames.MVC.Controllers
             return View();
         }
 
-        [HttpPost("addcategory")]
-        public async Task<IActionResult> SaveCategory([FromBody]Category category)
+        public async Task<IActionResult> SaveCategory(CreateCategoryRequestModel categoryRequestModel)
         {
-            var newEntity = await _employeeService.AddAsyncCategory(category);
+            var newCategory = new Category(categoryRequestModel.CategoryName,categoryRequestModel.PrioriryValue);
+            var newEntity = await _employeeService.AddAsyncCategory(newCategory);
+
+            foreach (var item in categoryRequestModel.Items.Where(c => c.CheckedItem == true))
+            {
+                newCategory.Items.Add(new Item(
+                    item.ItemId,
+                    item.Name,
+                    item.Description,
+                    item.DiscountDate,
+                    item.ImageUrl,
+                    item.Price,
+                    item.RetailerId,
+                    item.CategoryId));
+            }
+            await _employeeService.SaveChangesAsync();
             return View(newEntity);
         }
         public async Task<IActionResult> SaveItem(Item item)
