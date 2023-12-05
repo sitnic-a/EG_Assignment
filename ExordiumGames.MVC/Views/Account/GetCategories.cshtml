@@ -25,6 +25,18 @@
                            asp-route-CategoryId="@item.Id"
                            class="btn btn-primary">Details</a>
                     </td>
+                    <td>
+                        <a asp-action="UpdateCategory"
+                           asp-controller="Account"
+                           asp-route-CategoryId="@item.Id"
+                           class="btn btn-outline-primary">Update</a>
+                    </td>
+                    <td>
+                        <a asp-action="DeleteCategory"
+                           asp-controller="Account"
+                           asp-route-CategoryId="@item.Id"
+                           class="btn btn-danger">Delete</a>
+                    </td>
                 </tr>
             }
         </tbody>

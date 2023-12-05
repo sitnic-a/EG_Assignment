@@ -37,27 +37,35 @@ namespace ExordiumGames.MVC.Controllers
             return View(category);
         }
 
-        public async Task<IActionResult> CreateCategory()
+        public async Task<IActionResult> UpdateCategory(int CategoryId, Category category)
         {
-            var items = await _employeeService.GetItems();
+            var dbCategory = await _employeeService.GetCategoryById(CategoryId);
+            var items = _employeeService.GetItems().Result.Where(c => c.CategoryId != CategoryId);
+            var categoryResponseModel = new CategoryResponseModel
+            {
+                Id = CategoryId,
+                Name = dbCategory.Name,
+                Priority = dbCategory.Priority,
+            };
+            foreach (var item in items)
+            {
+                categoryResponseModel.Items.Add(new CreateCategoryItemResponseModel
+                {
+                    ItemId = item.Id,
+                    Name = item.Name,
+                    Description = item.Description,
+                    DiscountDate = item.DiscountDate,
+                    ImageUrl = item.ImageUrl,
+                    Price = item.Price,
+                    CategoryId = item.CategoryId,
+                    RetailerId = item.RetailerId,
+                    CheckedItem=false
+                });
+            }
+
             var categories = await _employeeService.GetCategories();
             var retailers = await _employeeService.GetRetailers();
 
-            IList<CreateCategoryItemResponseModel> itemsResponseModel = new List<CreateCategoryItemResponseModel>();
-            foreach (var item in items)
-            {
-                itemsResponseModel.Add(new CreateCategoryItemResponseModel(item.Id,
-                    item.Name,
-                    item.Description,
-                    item.DiscountDate,
-                    item.ImageUrl,
-                    item.Price,
-                    item.RetailerId,
-                    item.CategoryId,
-                    false));
-            }
-
-            ViewBag.Items = itemsResponseModel;
             ViewBag.Categories = categories.Select(i => new SelectListItem
             {
                 Text = i.Name,
@@ -69,6 +77,11 @@ namespace ExordiumGames.MVC.Controllers
                 Value = i.Id.ToString()
             }).ToList();
 
+            return View(categoryResponseModel);
+        }
+
+        public IActionResult CreateCategory()
+        {
             return View();
         }
         public async Task<IActionResult> CreateItem()
@@ -93,25 +106,37 @@ namespace ExordiumGames.MVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> SaveCategory(CreateCategoryRequestModel categoryRequestModel)
+        public async Task<IActionResult> SaveCategory(int CategoryId, CategoryResponseModel categoryRequestModel)
         {
-            var newCategory = new Category(categoryRequestModel.CategoryName, categoryRequestModel.PrioriryValue);
-            var newEntity = await _employeeService.AddAsyncCategory(newCategory);
-
-            foreach (var item in categoryRequestModel.Items.Where(c => c.CheckedItem == true))
+            if (CategoryId > 0)
             {
-                newCategory.Items.Add(new Item(
-                    item.ItemId,
-                    item.Name,
-                    item.Description,
-                    item.DiscountDate,
-                    item.ImageUrl,
-                    item.Price,
-                    item.RetailerId,
-                    item.CategoryId));
+                var updateCategory = new Category(categoryRequestModel.Name, categoryRequestModel.Priority);
+                var updatedEntity = await _employeeService.UpdateAsyncCategory(CategoryId, updateCategory);
+
+                foreach (var item in categoryRequestModel.Items.Where(c => c.CheckedItem == true))
+                {
+                    updateCategory.Items.Add(new Item(
+                        item.ItemId,
+                        item.Name,
+                        item.Description,
+                        item.DiscountDate,
+                        item.ImageUrl,
+                        item.Price,
+                        item.RetailerId,
+                        item.CategoryId));
+                }
+                foreach (var item in updateCategory.Items)
+                {
+                    var dbItem = await _employeeService.GetItem(item.Id);
+                    dbItem.CategoryId = item.CategoryId;
+                }
+                await _employeeService.SaveChangesAsync();
+                return RedirectToAction(actionName: "GetCategories");
             }
+            var newCategory = new Category(categoryRequestModel.Name, categoryRequestModel.Priority);
+            await _employeeService.AddAsyncCategory(newCategory);
             await _employeeService.SaveChangesAsync();
-            return View(newEntity);
+            return RedirectToAction(actionName: "GetCategories");
         }
         public async Task<IActionResult> SaveItem(int ItemId, CreateItemRequestModel itemRequestModel)
         {

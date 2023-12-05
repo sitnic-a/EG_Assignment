@@ -1,4 +1,4 @@
-﻿@model ExordiumGames.MVC.Dto.CreateCategoryRequestModel;
+﻿@model ExordiumGames.MVC.Dto.CategoryResponseModel;
 
 @using ExordiumGames.MVC.Data.DbModels;
 @using ExordiumGames.MVC.Dto;
@@ -24,52 +24,13 @@
     <form id="category-form" asp-action="SaveCategory">
         <div>
             <label for="Name">Category Name:</label><br />
-            <input type="text" id="Name" asp-for="CategoryName" placeholder="Enter category name.." class="form-control" />
-            <input type="hidden" asp-for="CategoryName" />
+            <input type="text" id="Name" asp-for="@Model.Name" placeholder="Enter category name.." class="form-control" />
+            <input type="hidden" asp-for="Name" />
         </div>
         <div>
             <label for="Priority">Priority:</label><br />
-            <input type="number" min="0" max="5" id="Priority" asp-for="PrioriryValue" class="form-control" />
-            <input type="hidden" asp-for="PrioriryValue" />
-        </div>
-        <br /> <br />
-        <div class="items-container">
-            @for (int i = 0; i < @items.Count; i++)
-            {
-                <div class="item form-control">
-                    <input class="item-checkbox" type="checkbox" asp-for="@items[i].CheckedItem" />
-                    <input type="hidden" asp-for="@items[i].CheckedItem" />
-                    <div>
-                        <input type="hidden" asp-for="@items[i].ItemId" />
-                    </div>
-                    <div>
-                        <p>@items[i].Name</p>
-                        <input type="hidden" asp-for="@items[i].Name" />
-                    </div>
-                    <div>
-                        <p>@items[i].Description</p>
-                        <input type="hidden" asp-for="@items[i].Description" />
-                    </div>
-                    <div>
-                        <p>@items[i].Price</p>
-                        <input type="hidden" asp-for="@items[i].Price" />
-                    </div>
-                    <div>
-                        <p>@items[i].DiscountDate</p>
-                        <input type="hidden" asp-for="@items[i].DiscountDate" />
-                    </div>
-                    <div>
-                        <img class="image" src="@items[i].ImageUrl" />
-                        <input type="hidden" asp-for="@items[i].ImageUrl" />
-                    </div>
-                    <div>
-                        <select asp-for="@items[i].RetailerId" asp-items="@retailers"></select>
-                    </div>
-                    <div>
-                        <select asp-for="@items[i].CategoryId" asp-items="@categories"></select>
-                    </div>
-                </div>
-            }
+            <input type="number" min="0" max="5" id="Priority" asp-for="@Model.Priority" class="form-control" />
+            <input type="hidden" asp-for="Priority" />
         </div>
         <button id="category-add-button" type="submit" class="form-control">Submit</button>
     </form>

@@ -1,0 +1,62 @@
+﻿@model ExordiumGames.MVC.Dto.CategoryResponseModel
+
+@{
+    var categories = ViewBag.Categories;
+    var retailers = ViewBag.Retailers;
+}
+
+<section class="update-category-container">
+    <form asp-action="SaveCategory" asp-controller="Account" asp-route-CategoryId="@Model.Id">
+        <div class="form-control">
+            <label>Category name:</label>
+            <input type="text" value="@Model.Name" />
+            <input type="hidden" asp-for="Name" />
+        </div>
+        <div class="form-control">
+            <label>Priority value:</label>
+            <input type="text" value="@Model.Priority" />
+            <input type="hidden" asp-for="Priority" />
+        </div>
+        @for (int i = 0; i < Model.Items.Count; i++)
+        {
+            <div class="item form-control">
+                <input class="item-checkbox" type="checkbox" asp-for="@Model.Items[i].CheckedItem" />
+                <input type="hidden" asp-for="@Model.Items[i].CheckedItem" />
+                <div>
+                    <input type="hidden" asp-for="@Model.Items[i].ItemId" />
+                </div>
+                <div>
+                    <p>@Model.Items[i].Name</p>
+                    <input type="hidden" asp-for="@Model.Items[i].Name" />
+                </div>
+                <div>
+                    <p>@Model.Items[i].Description</p>
+                    <input type="hidden" asp-for="@Model.Items[i].Description" />
+                </div>
+                <div>
+                    <p>@Model.Items[i].Price</p>
+                    <input type="hidden" asp-for="@Model.Items[i].Price" />
+                </div>
+                <div>
+                    <p>@Model.Items[i].DiscountDate</p>
+                    <input type="hidden" asp-for="@Model.Items[i].DiscountDate" />
+                </div>
+                <div>
+                    <img class="image" src="@Model.Items[i].ImageUrl" />
+                    <input type="hidden" asp-for="@Model.Items[i].ImageUrl" />
+                </div>
+                <div>
+                    <select asp-for="@Model.Items[i].RetailerId" asp-items="retailers">
+                        <option>---</option>
+                    </select>
+                </div>
+                <div>
+                    <select asp-for="@Model.Items[i].CategoryId" asp-items="categories">
+                        <option>---</option>
+                    </select>
+                </div>
+            </div>
+        }
+        <button type="submit">Save Changes</button>
+    </form>
+</section>
