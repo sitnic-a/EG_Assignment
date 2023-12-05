@@ -1,0 +1,54 @@
+﻿@model ExordiumGames.MVC.Dto.CreateItemRequestModel
+
+@{
+    var categories = ViewBag.Categories;
+    var retailers = ViewBag.Retailers;
+}
+
+<h3>Update item</h3>
+<section class="update-item-container">
+    <form asp-action="SaveItem" asp-controller="Account" asp-route-ItemId="@Model.ItemId">
+        <div class="form-control">
+            <label>Item name:</label>
+            <input type="text" value="@Model.Name" />
+            <input type="hidden" asp-for="Name" />
+        </div>
+        <div class="form-control">
+            <div style="display:flex; align-items:center">
+                <label>Item description:</label>
+                <textarea cols="15" rows="5" asp-for="Description">@Model.Description</textarea>
+            </div>
+        </div>
+        <div class="form-control">
+            <label>Discount date:</label>
+            <input type="text" value="@Model.DiscountDate" />
+            <input type="hidden" asp-for="DiscountDate" />
+        </div>
+        <div class="form-control">
+            <div>
+                <img class="image" src="@Model.ImageUrl" />
+            </div>
+            <label>Image URL:</label>
+            <input type="text" asp-for="ImageUrl" value="@Model.ImageUrl"/>
+            <input type="hidden" asp-for="@Model.ImageUrl" />
+        </div>
+        <div class="form-control">
+            <label>Price:</label>
+            <input type="text" value="@Model.Price" />
+            <input type="hidden" asp-for="Price" />
+        </div>
+        <div class="form-control">
+            <label>Category:</label>
+            <select asp-for="CategoryId" asp-items="categories">
+                <option>---</option>
+            </select>
+        </div>
+        <div class="form-control">
+            <label>Retailer:</label>
+            <select asp-for="RetailerId" asp-items="retailers">
+                <option>---</option>
+            </select>
+        </div>
+        <button type="submit">Save Changes</button>
+    </form>
+</section>

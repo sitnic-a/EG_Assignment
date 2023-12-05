@@ -186,5 +186,11 @@ namespace ExordiumGames.MVC.Services
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Item> GetItem(int id)
+        {
+            var dbItem = await _context.Items.FindAsync(id);
+            return dbItem != null ? dbItem : new Item();
+        }
     }
 }

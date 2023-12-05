@@ -2,6 +2,7 @@
 {
     public class CreateItemRequestModel
     {
+        public int ItemId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string DiscountDate { get; set; } = string.Empty;
@@ -11,7 +12,9 @@
         public int CategoryId { get; set; }
 
         public CreateItemRequestModel(){}
-        public CreateItemRequestModel(string name, 
+        public CreateItemRequestModel(
+            int itemId,
+            string name, 
             string description, 
             string discountDate, 
             string imageUrl, 
@@ -19,6 +22,7 @@
             int retailerId, 
             int categoryId)
         {
+            ItemId = itemId;
             Name = name;
             Description = description;
             DiscountDate = discountDate;
