@@ -7,6 +7,6 @@ namespace ExordiumGames.MVC.Dto
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int Priority { get; set; }
-        public List<CreateCategoryItemResponseModel> Items { get; set; } = new List<CreateCategoryItemResponseModel>();
+        public List<CreateItemResponseModel> Items { get; set; } = new List<CreateItemResponseModel>();
     }
 }

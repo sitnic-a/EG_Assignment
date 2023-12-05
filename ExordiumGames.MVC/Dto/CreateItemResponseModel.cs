@@ -2,7 +2,7 @@
 
 namespace ExordiumGames.MVC.Dto
 {
-    public class CreateCategoryItemResponseModel
+    public class CreateItemResponseModel
     {
         public int ItemId { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -14,9 +14,9 @@ namespace ExordiumGames.MVC.Dto
         public int CategoryId { get; set; }
         public bool CheckedItem { get; set; }
 
-        public CreateCategoryItemResponseModel() { }
+        public CreateItemResponseModel() { }
 
-        public CreateCategoryItemResponseModel(
+        public CreateItemResponseModel(
             int itemId,
             string name, 
             string description, 

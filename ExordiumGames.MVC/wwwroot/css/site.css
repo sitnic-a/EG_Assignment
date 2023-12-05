@@ -1,3 +1,10 @@
+*{
+    margin:0px;
+    padding:0px;
+    margin-block-start:0px;
+    margin-block-end:0px;
+}
+
 .items-container {
     width: 90%;
     display: flex;
@@ -39,3 +46,8 @@ img{
     width: 100px
 }
 
+.retailer{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}

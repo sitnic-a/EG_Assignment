@@ -1,6 +1,8 @@
 ﻿using ExordiumGames.MVC.Data;
 using ExordiumGames.MVC.Data.DbModels;
+using ExordiumGames.MVC.Dto;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ExordiumGames.MVC.Services
@@ -30,8 +32,8 @@ namespace ExordiumGames.MVC.Services
 
         public async Task<Category> GetCategoryById(int id)
         {
-            var categories = await _context.Categories.FindAsync(id);
-            return categories;
+            var category = await _context.Categories.FindAsync(id);
+            return category != null ? category : new Category();
         }
 
         public async Task<List<Retailer>> GetRetailers()
@@ -191,6 +193,12 @@ namespace ExordiumGames.MVC.Services
         {
             var dbItem = await _context.Items.FindAsync(id);
             return dbItem != null ? dbItem : new Item();
+        }
+
+        public async Task<Retailer> GetRetailersById(int id)
+        {
+            var retailer = await _context.Retailers.FindAsync(id);
+            return retailer != null ? retailer : new Retailer();
         }
     }
 }

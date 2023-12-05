@@ -1,0 +1,34 @@
+﻿@model List<ExordiumGames.MVC.Data.DbModels.Retailer>
+
+<div class="container">
+    <section class="retailers-container">
+        @foreach (var item in Model)
+        {
+            <div class="form-control retailer">
+                <div>
+                    <p>@item.Name</p>
+                    <p>@item.Priority</p>
+                </div>
+                <div>
+                    <img src="@item.LogoImage" />
+                </div>
+                <div>
+                    <a class="btn btn-primary"
+                       asp-action="RetailerDetails"
+                       asp-controller="Account"
+                       asp-route-RetailerId="@item.Id">Details</a>
+
+                    <a class="btn btn-outline-primary"
+                       asp-action="UpdateRetailer"
+                       asp-controller="Account"
+                       asp-route-RetailerId="@item.Id">Update</a>
+                    
+                       <a class="btn btn-danger"
+                       asp-action="DeleteRetailer"
+                       asp-controller="Account"
+                       asp-route-RetailerId="@item.Id">Delete</a>
+                </div>
+            </div>
+        }
+    </section>
+</div>

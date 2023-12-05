@@ -18,6 +18,7 @@
         Task<TItem> UpdateAsyncItem(int id, TItem Entity);
 
         Task<List<TRetailer>> GetRetailers();
+        Task<TRetailer> GetRetailersById(int id);
         Task<TRetailer> AddAsyncRetailer(TRetailer Entity);
         Task<TRetailer> DeleteAsyncRetailer(int id);
         Task<TRetailer> UpdateAsyncRetailer(int id, TRetailer Entity);
