@@ -331,5 +331,11 @@ namespace ExordiumGames.MVC.Controllers
             return View();
         }
 
+        public async Task<IActionResult> DeleteRetailer(int RetailerId)
+        {
+            var dbRetailer = await _employeeService.DeleteAsyncRetailer(RetailerId);
+            return RedirectToAction(actionName: "GetRetailers");
+        }
+
     }
 }

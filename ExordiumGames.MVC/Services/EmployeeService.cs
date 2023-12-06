@@ -93,6 +93,10 @@ namespace ExordiumGames.MVC.Services
             var dbEntity = await _context.Retailers.FindAsync(id);
             if (dbEntity is not null)
             {
+                foreach (var item in _context.Items.Where(i => i.RetailerId == id))
+                {
+                    _context.Items.Remove(item);
+                }
                 _context.Retailers.Remove(dbEntity);
                 await _context.SaveChangesAsync();
                 return dbEntity;

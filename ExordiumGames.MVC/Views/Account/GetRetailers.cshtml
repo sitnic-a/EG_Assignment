@@ -1,6 +1,11 @@
 ﻿@model List<ExordiumGames.MVC.Data.DbModels.Retailer>
 
 <div class="container">
+    
+    <div>
+        <a class="btn btn-primary" asp-action="CreateRetailer" asp-controller="Account">Add New Retailer</a>
+    </div>
+    <br />
     <section class="retailers-container">
         @foreach (var item in Model)
         {
@@ -22,8 +27,8 @@
                        asp-action="UpdateRetailer"
                        asp-controller="Account"
                        asp-route-RetailerId="@item.Id">Update</a>
-                    
-                       <a class="btn btn-danger"
+
+                    <a class="btn btn-danger"
                        asp-action="DeleteRetailer"
                        asp-controller="Account"
                        asp-route-RetailerId="@item.Id">Delete</a>
