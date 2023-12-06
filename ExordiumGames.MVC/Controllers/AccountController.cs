@@ -41,8 +41,18 @@ namespace ExordiumGames.MVC.Controllers
                 }
                 foreach (var item in updateCategory.Items)
                 {
-                    var dbItem = await _employeeService.GetItem(item.Id);
-                    dbItem.CategoryId = item.CategoryId;
+                    await _employeeService.UpdateAsyncItem(item.Id,new Item(item.Id,
+                        item.Name,
+                        item.Description,
+                        item.DiscountDate,
+                        item.ImageUrl,
+                        item.Price,
+                        item.RetailerId.Value,
+                        item.CategoryId));
+
+                    //var dbItem = await _employeeService.GetItem(item.Id);
+
+                    //dbItem.CategoryId = item.CategoryId;
                 }
                 await _employeeService.SaveChangesAsync();
                 return RedirectToAction(actionName: "GetCategories");
@@ -155,11 +165,7 @@ namespace ExordiumGames.MVC.Controllers
             var updatedItem = await _employeeService.UpdateAsyncItem(ItemId, itemUpdate);
             return RedirectToAction(actionName: "GetItems");
         }
-        public async Task<IActionResult> SaveRetailer(Retailer retailer)
-        {
-            var newEntity = await _employeeService.AddAsyncRetailer(retailer);
-            return View(newEntity);
-        }
+
 
         public async Task<IActionResult> UpdateItem(int ItemId, Item item)
         {
@@ -206,10 +212,10 @@ namespace ExordiumGames.MVC.Controllers
 
         public async Task<IActionResult> RetailerDetails(int RetailerId)
         {
-            var retailer = await _employeeService.GetRetailersById(RetailerId);
+            var retailer = await _employeeService.GetRetailerById(RetailerId);
             var retailerItems = _employeeService.GetItems().Result.Where(i => i.RetailerId == RetailerId);
 
-            var retailerResponseModel = new RetailerResponseModel
+            var retailerResponseModel = new RetailerRequestModel
             {
                 RetailerId = RetailerId,
                 Name = retailer.Name,
@@ -218,7 +224,7 @@ namespace ExordiumGames.MVC.Controllers
 
             foreach (var item in retailerItems)
             {
-                retailerResponseModel.Items.Add(new CreateItemRequestModel(
+                retailerResponseModel.Items.Add(new CreateItemResponseModel(
                     item.Id,
                     item.Name,
                     item.Description,
@@ -226,12 +232,100 @@ namespace ExordiumGames.MVC.Controllers
                     item.ImageUrl,
                     item.Price,
                     item.RetailerId.Value,
-                    item.CategoryId
+                    item.CategoryId,
+                    false
                     ));
             }
 
             return View(retailerResponseModel);
         }
+
+        public async Task<IActionResult> UpdateRetailer(int RetailerId)
+        {
+            var dbRetailer = await _employeeService.GetRetailerById(RetailerId);
+            var items = _employeeService.GetItems().Result.Where(r => r.RetailerId != RetailerId);
+
+            var retailerResponseModel = new RetailerRequestModel
+            {
+                RetailerId = RetailerId,
+                Name = dbRetailer.Name,
+                Priority = dbRetailer.Priority,
+                LogoImage = dbRetailer.LogoImage
+            };
+            foreach (var item in items)
+            {
+                retailerResponseModel.Items.Add(new CreateItemResponseModel(
+                    item.Id,
+                    item.Name,
+                    item.Description,
+                    item.DiscountDate,
+                    item.ImageUrl,
+                    item.Price,
+                    item.RetailerId.Value,
+                    item.CategoryId,
+                    false));
+            }
+
+            var retailers = await _employeeService.GetRetailers();
+            var categories = await _employeeService.GetCategories();
+
+            ViewBag.Retailers = retailers.Select(r => new SelectListItem
+            {
+                Text = r.Name,
+                Value = r.Id.ToString()
+            });
+            ViewBag.Categories = categories.Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            });
+
+            return View(retailerResponseModel);
+        }
+
+        public async Task<IActionResult> SaveRetailer(int RetailerId, RetailerRequestModel retailerRequestModel)
+        {
+            if (RetailerId > 0)
+            {
+                var updateRetailer = new Retailer(retailerRequestModel.Name, retailerRequestModel.Priority, retailerRequestModel.LogoImage);
+                var updatedEntity = await _employeeService.UpdateAsyncRetailer(RetailerId, updateRetailer);
+
+                foreach (var item in retailerRequestModel.Items.Where(c => c.CheckedItem == true))
+                {
+                    updateRetailer.Items.Add(new Item(
+                        item.ItemId,
+                        item.Name,
+                        item.Description,
+                        item.DiscountDate,
+                        item.ImageUrl,
+                        item.Price,
+                        item.RetailerId,
+                        item.CategoryId));
+                }
+                foreach (var item in updateRetailer.Items)
+                {
+                    await _employeeService.UpdateAsyncItem(item.Id, new Item(item.Id,
+                        item.Name,
+                        item.Description,
+                        item.DiscountDate,
+                        item.ImageUrl,
+                        item.Price,
+                        item.RetailerId.Value,
+                        item.CategoryId));
+
+                    //var dbItem = await _employeeService.GetItem(item.Id);
+
+                    //dbItem.CategoryId = item.CategoryId;
+                }
+                await _employeeService.SaveChangesAsync();
+                return RedirectToAction(actionName: "GetRetailers");
+        }
+            var retailer = new Retailer(retailerRequestModel.Name, retailerRequestModel.Priority, retailerRequestModel.LogoImage);
+            await _employeeService.AddAsyncRetailer(retailer);
+            await _employeeService.SaveChangesAsync();
+            return RedirectToAction(actionName: "GetRetailers");
+        }
+
         public IActionResult CreateRetailer()
         {
             return View();

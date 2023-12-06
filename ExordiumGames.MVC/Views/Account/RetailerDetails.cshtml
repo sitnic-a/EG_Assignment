@@ -1,16 +1,16 @@
-﻿@model ExordiumGames.MVC.Dto.RetailerResponseModel
+﻿@model ExordiumGames.MVC.Dto.RetailerRequestModel
 
-<section class="retailer-container">
+<section class="container">
     <div class="form-control">
         <p>@Model.Name</p>
     </div>
     <div class="form-control">
         <p>@Model.Priority</p>
     </div>
-    <section class="items-container">
+    <div class="items-container">
         @foreach (var item in Model.Items)
         {
-            <div class="item-container">
+            <div class="item form-control">
                     <p>Item name: @item.Name</p>
                     <p>Item description: @item.Description</p>
                     <p>Item discount date: @item.DiscountDate</p>
@@ -21,5 +21,5 @@
                     <p>Price: @item.Price</p>
             </div>
         }
-    </section>
+    </div>
 </section>
