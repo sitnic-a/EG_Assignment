@@ -151,7 +151,7 @@ namespace ExordiumGames.MVC.Controllers
                 var newEntity = await _employeeService.AddAsyncItem(item);
                 return RedirectToAction(actionName: "GetItems");
             }
-            var itemUpdate = new Item(itemRequestModel.Name, itemRequestModel.Description, itemRequestModel.DiscountDate, itemRequestModel.ImageUrl, itemRequestModel.Price, itemRequestModel.RetailerId, itemRequestModel.CategoryId);
+            var itemUpdate = new Item(itemRequestModel.ItemId, itemRequestModel.Name, itemRequestModel.Description, itemRequestModel.DiscountDate, itemRequestModel.ImageUrl, itemRequestModel.Price, itemRequestModel.RetailerId, itemRequestModel.CategoryId);
             var updatedItem = await _employeeService.UpdateAsyncItem(ItemId, itemUpdate);
             return RedirectToAction(actionName: "GetItems");
         }
