@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace ExordiumGames.MVC.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<User,IdentityRole,string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
@@ -40,9 +40,9 @@ namespace ExordiumGames.MVC.Data
         private void SeedRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>().HasData(
-                new IdentityRole() { Id = "fab4fac1-c546-41de-aebc-a14da6895711", Name = "Admin" },
-                new IdentityRole() { Id = "7d17aed9-12ca-4e22-8f5f-df10fac4bd8f", Name = "Employee" },
-                new IdentityRole() { Id = "1e2a4ea4-ee99-4490-9dd6-3654b030620c", Name = "User" }
+                new IdentityRole() { Id = "fab4fac1-c546-41de-aebc-a14da6895711", Name = "Admin", NormalizedName="ADMIN" },
+                new IdentityRole() { Id = "7d17aed9-12ca-4e22-8f5f-df10fac4bd8f", Name = "Employee", NormalizedName = "EMPLOYEE" },
+                new IdentityRole() { Id = "1e2a4ea4-ee99-4490-9dd6-3654b030620c", Name = "User", NormalizedName = "USER" }
                 );
         }
 

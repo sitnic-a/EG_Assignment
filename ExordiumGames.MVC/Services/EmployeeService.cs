@@ -138,7 +138,7 @@ namespace ExordiumGames.MVC.Services
 
         public async Task<Item> UpdateAsyncItem(int id, Item Entity)
         {
-            var dbEntity = _context.Items.Find(id);
+            var dbEntity = await _context.Items.FindAsync(id);
             //Extension method for Entity is not null to implement
             if (dbEntity is not null && Entity is not null)
             {
@@ -151,7 +151,7 @@ namespace ExordiumGames.MVC.Services
                 dbEntity.RetailerId = Entity.RetailerId;
                 dbEntity.CategoryId = Entity.CategoryId;
 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return dbEntity;
             }
             return new Item();
