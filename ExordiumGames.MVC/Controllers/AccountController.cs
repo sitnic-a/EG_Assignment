@@ -10,14 +10,17 @@ namespace ExordiumGames.MVC.Controllers
     public class AccountController : Controller
     {
         private readonly IEmployeeService<Category, Item, Retailer> _employeeService;
+        private readonly IAdminService _adminService;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController(IEmployeeService<Category, Item, Retailer> employeeService,
+            IAdminService adminService,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             _employeeService = employeeService;
+            _adminService = adminService;
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -49,7 +52,7 @@ namespace ExordiumGames.MVC.Controllers
                 }
                 foreach (var item in updateCategory.Items)
                 {
-                    await _employeeService.UpdateAsyncItem(item.Id,new Item(item.Id,
+                    await _employeeService.UpdateAsyncItem(item.Id, new Item(item.Id,
                         item.Name,
                         item.Description,
                         item.DiscountDate,
@@ -86,7 +89,7 @@ namespace ExordiumGames.MVC.Controllers
 
             return View(category);
         }
-        
+
         public async Task<IActionResult> UpdateCategory(int CategoryId, Category category)
         {
             var dbCategory = await _employeeService.GetCategoryById(CategoryId);
@@ -173,7 +176,7 @@ namespace ExordiumGames.MVC.Controllers
             var items = await _employeeService.GetItems();
             return View(items);
         }
-        
+
         public async Task<IActionResult> UpdateItem(int ItemId, Item item)
         {
             var dbItem = await _employeeService.GetItem(ItemId);
@@ -333,7 +336,7 @@ namespace ExordiumGames.MVC.Controllers
 
             return View(retailerResponseModel);
         }
-                
+
         public async Task<IActionResult> DeleteRetailer(int RetailerId)
         {
             var dbRetailer = await _employeeService.DeleteAsyncRetailer(RetailerId);
@@ -345,7 +348,7 @@ namespace ExordiumGames.MVC.Controllers
 
         public IActionResult CreateUser()
         {
-            var roles = _roleManager.Roles.Select(r => new RoleDto{ Id = r.Id, Name = r.Name }).ToList();
+            var roles = _roleManager.Roles.Select(r => new RoleDto { Id = r.Id, Name = r.Name }).ToList();
             UserDto user = new UserDto
             {
                 Roles = roles
@@ -363,12 +366,38 @@ namespace ExordiumGames.MVC.Controllers
                 var inRole = await _userManager.IsInRoleAsync(user, wantedRole.Name);
                 if (!inRole)
                 {
-                    var newRole = await _userManager.AddToRoleAsync(user,wantedRole.Name);
+                    var newRole = await _userManager.AddToRoleAsync(user, wantedRole.Name);
                 }
             }
-            return View(newUser);
+            return RedirectToAction(actionName: "GetUsers");
         }
 
+        public async Task<IActionResult> GetUsers()
+        {
+            var dbUsers = await _adminService.GetUsers();
+            List<UserDto> users = new List<UserDto>();
+            UserRolesDto user;
+            foreach (var dbUser in dbUsers)
+            {
+                var roles = await _userManager.GetRolesAsync(dbUser);
+                user = new UserRolesDto
+                {
+                    User = new UserDto(dbUser.Email, dbUser.Title),
+                    Roles = roles
+                };
+                users.Add(new UserDto
+                {
+                    Email = user.User.Email,
+                    Username = user.User.Username,
+                    Title = user.User.Title,
+                    Roles = user.Roles.Select(r => new RoleDto { Name = r }).ToList()
+                });
 
+        }
+            
+            return View(users);
     }
+
+
+}
 }

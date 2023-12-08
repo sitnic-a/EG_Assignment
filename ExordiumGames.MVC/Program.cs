@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //Custom services
+builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IEmployeeService<Category, Item, Retailer>, EmployeeService>();
 builder.Services.AddTransient<IPopulateDBService, PopulateDBService>();
 

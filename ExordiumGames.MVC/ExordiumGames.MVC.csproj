@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Account\Admin\**" />
+    <Content Remove="Views\Account\Admin\**" />
+    <EmbeddedResource Remove="Views\Account\Admin\**" />
+    <None Remove="Views\Account\Admin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Dto\CreateCategoryRequestModel.cs" />
   </ItemGroup>
 
@@ -19,10 +26,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.11" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Account\Admin\" />
   </ItemGroup>
 
 </Project>

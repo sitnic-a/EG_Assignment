@@ -51,3 +51,15 @@ img{
     align-items: center;
     justify-content: space-evenly;
 }
+
+table{
+    text-align:center;
+}
+
+.user-roles-row{
+    vertical-align:middle;
+}
+
+.role-row{
+    margin-top: 0.4rem
+}

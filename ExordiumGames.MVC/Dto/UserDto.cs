@@ -10,11 +10,19 @@
 
         public UserDto(){}
 
+        public UserDto(string email, string title)
+        {
+            Email = email;
+            Title = title;
+            Username = email.ToUpperInvariant();
+        }
+
         public UserDto(string email, string password, string title)
         {
             Email = email;
             Password = password;
             Title = title;
+            Username = email.ToUpperInvariant();
         }
     }
 }
