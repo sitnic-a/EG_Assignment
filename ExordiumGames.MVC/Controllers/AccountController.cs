@@ -4,6 +4,7 @@ using ExordiumGames.MVC.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace ExordiumGames.MVC.Controllers
 {
@@ -13,16 +14,19 @@ namespace ExordiumGames.MVC.Controllers
         private readonly IAdminService _adminService;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<User> _signInManager;
 
         public AccountController(IEmployeeService<Category, Item, Retailer> employeeService,
             IAdminService adminService,
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            SignInManager<User> signInManager)
         {
             _employeeService = employeeService;
             _adminService = adminService;
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         #region Employee
@@ -345,6 +349,10 @@ namespace ExordiumGames.MVC.Controllers
 
         #endregion
 
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
 
         public IActionResult CreateUser()
         {
@@ -393,11 +401,30 @@ namespace ExordiumGames.MVC.Controllers
                     Roles = user.Roles.Select(r => new RoleDto { Name = r }).ToList()
                 });
 
-        }
-            
+            }
             return View(users);
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> SignIn(UserDto loginUser)
+        {
+            var user = new User(loginUser.Email, loginUser.Title);
+            var existingUser = _adminService.GetUsers().Result.FirstOrDefault(u => u.Email == loginUser.Email);
+            if (existingUser != null)
+            {
+                if (await _userManager.CheckPasswordAsync(existingUser,loginUser.Password))
+                {
+                    await _signInManager.SignInAsync(existingUser, isPersistent: false);
+                    return RedirectToAction(actionName: "Dashboard");
+                }
+            }
+            
+            return RedirectToAction("Login");
+        }
+
     }
-
-
-}
 }

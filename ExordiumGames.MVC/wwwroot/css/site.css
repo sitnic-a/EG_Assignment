@@ -63,3 +63,11 @@ table{
 .role-row{
     margin-top: 0.4rem
 }
+
+.links{
+    display: flex;
+}
+
+.link-of-choice {
+    padding: 2rem;
+}

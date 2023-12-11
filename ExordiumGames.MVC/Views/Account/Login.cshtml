@@ -1,0 +1,18 @@
+﻿@model ExordiumGames.MVC.Dto.UserDto
+
+<section class="container login-container">
+    <form asp-action="SignIn" asp-controller="Account">
+        <div class="form-control">
+            <label asp-for="@Model.Email">Email:</label> <br />
+            <input type="text" class="form-control" asp-for="@Model.Email" placeholder="Enter your email..." />
+            <input asp-for="Email" type="hidden" />
+        </div>
+
+        <div class="form-control">
+            <label asp-for="@Model.Password">Password:</label> <br />
+            <input type="password" class="form-control" asp-for="@Model.Password" />
+            <input asp-for="Password" type="hidden" />
+        </div>
+        <button type="submit">Login</button>
+    </form>
+</section>
