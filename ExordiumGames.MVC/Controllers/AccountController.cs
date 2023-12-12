@@ -410,7 +410,7 @@ namespace ExordiumGames.MVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> SignIn(UserDto loginUser)
+        public async Task<IActionResult> SignUserIn(UserDto loginUser)
         {
             var user = new User(loginUser.Email, loginUser.Title);
             var existingUser = _adminService.GetUsers().Result.FirstOrDefault(u => u.Email == loginUser.Email);
@@ -424,6 +424,12 @@ namespace ExordiumGames.MVC.Controllers
             }
             
             return RedirectToAction("Login");
+        }
+
+        public async Task<IActionResult> SignUserOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(actionName: "Login");
         }
 
     }
