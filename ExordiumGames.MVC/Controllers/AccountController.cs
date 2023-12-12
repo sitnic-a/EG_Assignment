@@ -377,7 +377,7 @@ namespace ExordiumGames.MVC.Controllers
                     var newRole = await _userManager.AddToRoleAsync(user, wantedRole.Name);
                 }
             }
-            return RedirectToAction(actionName: "GetUsers");
+            return RedirectToAction(actionName: "Dashboard");
         }
 
         public async Task<IActionResult> GetUsers()
@@ -395,6 +395,7 @@ namespace ExordiumGames.MVC.Controllers
                 };
                 users.Add(new UserDto
                 {
+                    UserId = dbUser.Id,
                     Email = user.User.Email,
                     Username = user.User.Username,
                     Title = user.User.Title,
@@ -429,8 +430,13 @@ namespace ExordiumGames.MVC.Controllers
         public async Task<IActionResult> SignUserOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(actionName: "Login");
+            return RedirectToAction(actionName: "Dashboard");
         }
 
+        public async Task<IActionResult> DeleteUserById(string UserId)
+        {
+            var removedUser = await _adminService.DeleteById(UserId);
+            return RedirectToAction(actionName: "GetUsers");
+        }
     }
 }

@@ -5,5 +5,7 @@ namespace ExordiumGames.MVC.Services
     public interface IAdminService
     {
         Task<List<User>> GetUsers();
+        Task<List<User>> UpdateRoles(string userId);
+        Task<User> DeleteById(string userId);
     }
 }

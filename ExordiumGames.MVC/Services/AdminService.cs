@@ -14,10 +14,29 @@ namespace ExordiumGames.MVC.Services
             _context = context;
             _adminLogger = adminLogger;
         }
+
         public async Task<List<User>> GetUsers()
         {
             var users = await _context.Users.ToListAsync();
             return users;
         }
+
+        public Task<List<User>> UpdateRoles(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<User> DeleteById(string userId)
+        {
+            var dbUser = await _context.Users.FindAsync(userId);
+            if (dbUser != null)
+            {
+                _context.Users.Remove(dbUser);
+                await _context.SaveChangesAsync();
+                return dbUser;
+            }
+            return new User();
+        }    
+       
     }
 }

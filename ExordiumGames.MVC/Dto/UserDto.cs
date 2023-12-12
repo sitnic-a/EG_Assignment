@@ -2,6 +2,7 @@
 {
     public class UserDto
     {
+        public string UserId { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
@@ -17,8 +18,9 @@
             Username = email.ToUpperInvariant();
         }
 
-        public UserDto(string email, string password, string title)
+        public UserDto(string userId, string email, string password, string title)
         {
+            UserId = userId;
             Email = email;
             Password = password;
             Title = title;
