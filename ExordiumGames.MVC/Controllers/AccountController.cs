@@ -4,6 +4,7 @@ using ExordiumGames.MVC.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace ExordiumGames.MVC.Controllers
@@ -406,6 +407,49 @@ namespace ExordiumGames.MVC.Controllers
             return View(users);
         }
 
+        public async Task<IActionResult> UserDetails(string UserId)
+        {
+            var dbUser = await _adminService.GetById(UserId);
+
+            var dbUserInRoles = await _userManager.GetRolesAsync(dbUser);
+            var roles = await _roleManager.Roles.Select(r => new RoleDto
+            {
+                Id = r.Id,
+                Name = r.Name,
+                CheckedItem = false
+            }).ToListAsync();
+
+            var userDto = new UserDto
+            {
+                UserId = dbUser.Id,
+                Username = dbUser.UserName,
+                Email = dbUser.Email,
+                Title = dbUser.Title,
+                Roles = roles
+            };
+
+            return View(userDto);
+        }
+
+        public async Task<IActionResult> UpdateUserRoles(string UserId, UserDto updateUserRoles)
+        {
+            var updatedRolesCount = updateUserRoles.Roles.Where(r => r.CheckedItem == true).Count();
+            var user = await _adminService.GetById(UserId);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (updatedRolesCount <= 0)
+            {
+                return RedirectToAction(actionName: "GetUsers");
+            }
+            
+            foreach (var role in roles)
+            {
+                await _userManager.RemoveFromRoleAsync(user, role);
+            }
+
+            return RedirectToAction(actionName: "GetUsers");
+        }
+
         public IActionResult Login()
         {
             return View();
@@ -417,13 +461,13 @@ namespace ExordiumGames.MVC.Controllers
             var existingUser = _adminService.GetUsers().Result.FirstOrDefault(u => u.Email == loginUser.Email);
             if (existingUser != null)
             {
-                if (await _userManager.CheckPasswordAsync(existingUser,loginUser.Password))
+                if (await _userManager.CheckPasswordAsync(existingUser, loginUser.Password))
                 {
                     await _signInManager.SignInAsync(existingUser, isPersistent: false);
                     return RedirectToAction(actionName: "Dashboard");
                 }
             }
-            
+
             return RedirectToAction("Login");
         }
 
@@ -432,6 +476,8 @@ namespace ExordiumGames.MVC.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(actionName: "Dashboard");
         }
+
+
 
         public async Task<IActionResult> DeleteUserById(string UserId)
         {

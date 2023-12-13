@@ -26,14 +26,20 @@
                             <div class="form-control role-row">@role.Name</div>
                         }
                     </td>
-                    <td><a class="btn btn-outline-primary">Update</a></td>
+                    <td>
+                        <a class="btn btn-outline-primary"
+                           asp-action="UserDetails"
+                           asp-controller="Account"
+                           asp-route-UserId="@item.UserId">Update</a>
+                    </td>
                     @if (!item.Roles.Any(s => s.Name == "Admin"))
                     {
-                        <td><a class="btn btn-danger" 
-                            asp-action="DeleteUserById" 
-                            asp-controller="Account"
-                            asp-route-UserId="@item.UserId"
-                        >Delete</a></td>
+                        <td>
+                            <a class="btn btn-danger"
+                               asp-action="DeleteUserById"
+                               asp-controller="Account"
+                               asp-route-UserId="@item.UserId">Delete</a>
+                        </td>
                     }
                 </tr>
             }

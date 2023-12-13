@@ -21,6 +21,12 @@ namespace ExordiumGames.MVC.Services
             return users;
         }
 
+        public async Task<User> GetById(string userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            return user != null ? user : new User();
+        }
+
         public Task<List<User>> UpdateRoles(string userId)
         {
             throw new NotImplementedException();
