@@ -447,6 +447,12 @@ namespace ExordiumGames.MVC.Controllers
                 await _userManager.RemoveFromRoleAsync(user, role);
             }
 
+            for (int i = 0; i < updatedRolesCount; i++)
+            {
+                var role = updateUserRoles.Roles[i].Name;
+                await _userManager.AddToRoleAsync(user, role);
+            }
+
             return RedirectToAction(actionName: "GetUsers");
         }
 
