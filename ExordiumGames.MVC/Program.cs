@@ -5,6 +5,7 @@ using ExordiumGames.MVC.Utils.Parsers;
 using ExordiumGames.MVC.Utils.Parsers.XMLModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +17,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //Custom services
+builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IEmployeeService<Category, Item, Retailer>, EmployeeService>();
 builder.Services.AddTransient<IPopulateDBService, PopulateDBService>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddMvc();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

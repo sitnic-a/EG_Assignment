@@ -15,6 +15,7 @@
             <img src="@item.ImageUrl" />
             <div>
                 <a asp-action="DeleteItem" asp-controller="Account" asp-route-ItemId="@item.Id" class="btn btn-danger">Delete Item</a>
+                <a asp-action="UpdateItem" asp-controller="Account" asp-route-ItemId="@item.Id" class="btn btn-outline-primary">Update Item</a>
             </div>
         </div>
         <br />

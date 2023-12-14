@@ -1,0 +1,41 @@
+﻿@model ExordiumGames.MVC.Dto.UserDto
+
+<section class="container register-user-container">
+    <form asp-action="SaveUser" asp-controller="Account">
+        <div class="form-control">
+            <label asp-for="Email">Email: </label>
+            <input class="form-control" type="text" asp-for="@Model.Email" placeholder="Enter your email" />
+            <input type="hidden" asp-for="@Model.Email" />
+        </div>
+        <div class="form-control">
+            <label asp-for="Password">Password: </label>
+            <input class="form-control" type="password" asp-for="@Model.Password" />
+            <input type="hidden" asp-for="@Model.Password" />
+        </div>
+        <div class="form-control">
+            <label asp-for="Title">Title: </label>
+            <input class="form-control" type="text" asp-for="@Model.Title" />
+            <input type="hidden" asp-for="@Model.Title" />
+        </div>
+        <div class="form-control">
+            <label asp-for="Title">Title: </label>
+            @for (int i = 0; i < Model.Roles.Count; i++)
+            {
+
+                <div class="form-check m-1">
+                    <input type="hidden" asp-for="@Model.Roles[i].Id" />
+                    <input type="hidden" asp-for="@Model.Roles[i].Name" />
+                    <input asp-for="@Model.Roles[i].CheckedItem" class="form-check-input" />
+                    <label class="form-check-label" asp-for="@Model.Roles[i].Name">
+                        @Model.Roles[i].Name
+                    </label>
+                </div>
+
+                @* <span style="margin-left: 0.5rem">@roles[i].Name</span>
+                <input type="checkbox" name="@roles[i].Name" asp-for="@Model.Roles[i].Name" value="true" />
+                <input type="hidden" name="@roles[i].Name" asp-for="@Model.Roles[i].Name" value="true" /> *@
+            }
+        </div>
+        <button type="submit">Save</button>
+    </form>
+</section>

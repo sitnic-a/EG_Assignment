@@ -1,3 +1,10 @@
+*{
+    margin:0px;
+    padding:0px;
+    margin-block-start:0px;
+    margin-block-end:0px;
+}
+
 .items-container {
     width: 90%;
     display: flex;
@@ -39,3 +46,28 @@ img{
     width: 100px
 }
 
+.retailer{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+table{
+    text-align:center;
+}
+
+.user-roles-row{
+    vertical-align:middle;
+}
+
+.role-row{
+    margin-top: 0.4rem
+}
+
+.links{
+    display: flex;
+}
+
+.link-of-choice {
+    padding: 2rem;
+}
