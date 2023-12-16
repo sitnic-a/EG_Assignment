@@ -433,7 +433,8 @@ namespace ExordiumGames.MVC.Controllers
 
         public async Task<IActionResult> UpdateUserRoles(string UserId, UserDto updateUserRoles)
         {
-            var updatedRolesCount = updateUserRoles.Roles.Where(r => r.CheckedItem == true).Count();
+            var updatedRoles = updateUserRoles.Roles.Where(r => r.CheckedItem == true);
+            var updatedRolesCount = updatedRoles.Count();
             var user = await _adminService.GetById(UserId);
             var roles = await _userManager.GetRolesAsync(user);
 
@@ -449,7 +450,7 @@ namespace ExordiumGames.MVC.Controllers
 
             for (int i = 0; i < updatedRolesCount; i++)
             {
-                var role = updateUserRoles.Roles[i].Name;
+                var role = updatedRoles.ElementAt(i).Name;
                 await _userManager.AddToRoleAsync(user, role);
             }
 
