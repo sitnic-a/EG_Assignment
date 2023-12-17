@@ -9,23 +9,23 @@ namespace ExordiumGames.MVC.Services
     public class UserService : IUserService<CategoryFilterDto, RetailerFilterDto>
     {
         private readonly ApplicationDbContext _context;
-        private readonly IEmployeeService<Category, Item, Retailer> _employeeService;
         private readonly ILogger<UserService> _userLogger;
-
+        private readonly IEnumerable<Category> _dbCategories;
         public UserService(ApplicationDbContext context,
-            IEmployeeService<Category, Item, Retailer> employeeService,
             ILogger<UserService> userLogger)
         {
             _context = context;
-            _employeeService = employeeService;
             _userLogger = userLogger;
+            _dbCategories = _context.Categories
+                            .Where(c => !String.IsNullOrEmpty(c.Name) || !String.IsNullOrWhiteSpace(c.Name))
+                            .Include(i => i.Items);
         }
         public async Task<IEnumerable<Category>> FilterCategoriesAsync(CategoryFilterDto? queryCategory)
         {
-            var query = _context.Categories
-                .Include(i => i.Items);
+            IEnumerable<Category> filteredItems = new List<Category>();
+            List<Category> categories = new List<Category>();
 
-            if (_context.Categories.Count() <= 0)
+            if (_dbCategories.Count() <= 0)
             {
                 return new List<Category>();
             }
@@ -34,40 +34,31 @@ namespace ExordiumGames.MVC.Services
             {
                 if (queryCategory.CategoriesAreNotFiltered() == true)
                 {
-                    return await _employeeService.GetCategories();
+                    return _dbCategories;
                 }
 
                 if (!String.IsNullOrEmpty(queryCategory.CategoryName) ||
                 !String.IsNullOrWhiteSpace(queryCategory.CategoryName))
                 {
-                    query.Where(c => c.Name.StartsWith(queryCategory.CategoryName) ||
+
+                    filteredItems = _dbCategories
+                        .Where(c => c.Name.StartsWith(queryCategory.CategoryName) ||
                                 c.Name.EndsWith(queryCategory.CategoryName) ||
                                 c.Name.Equals(queryCategory.CategoryName));
+                    categories.AddRange(filteredItems);
                 }
 
                 if (queryCategory.CategoryPriority > 0)
                 {
-                    query.Where(p => p.Priority.Equals(queryCategory.CategoryPriority));
+                    filteredItems = _dbCategories
+                        .Where(p => p.Priority == queryCategory.CategoryPriority);
+                    categories.AddRange(filteredItems);
                 }
 
-                if (!String.IsNullOrEmpty(queryCategory.ItemName) ||
-                    !String.IsNullOrWhiteSpace(queryCategory.ItemName))
-                {
-                    query.SelectMany(i => i.Items)
-                            .Where(i => i.Name.StartsWith(queryCategory.ItemName) ||
-                                        i.Name.EndsWith(queryCategory.ItemName) ||
-                                        i.Equals(queryCategory.ItemName));
-                }
-
-                if (queryCategory.ItemPrice > 0)
-                {
-                    query.SelectMany(i => i.Items)
-                            .Where(p => p.Price.Equals(queryCategory.ItemPrice));
-                }
-                return query;
+                return categories;
             }
 
-            return await _employeeService.GetCategories();
+            return _dbCategories;
         }
 
         public Task<IEnumerable<Retailer>> FilterRetailersAsync(RetailerFilterDto? queryRetailer)

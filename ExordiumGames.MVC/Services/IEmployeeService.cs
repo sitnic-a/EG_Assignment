@@ -1,4 +1,6 @@
-﻿namespace ExordiumGames.MVC.Services
+﻿using ExordiumGames.MVC.Dto.FilteringDto;
+
+namespace ExordiumGames.MVC.Services
 {
     public interface IEmployeeService<TCategory,TItem, TRetailer>  where TCategory:class
                                                                    where TItem : class
@@ -7,7 +9,7 @@
         Task<List<TItem>> GetItems();
         Task<TItem> GetItem(int id);
 
-        Task<List<TCategory>> GetCategories();
+        Task<List<TCategory>> GetCategories(CategoryFilterDto?queryCategory);
         Task<TCategory> GetCategoryById(int id);
         Task<TCategory> AddAsyncCategory(TCategory Entity);
         Task<TCategory> DeleteAsyncCategory(int id);
