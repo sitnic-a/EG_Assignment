@@ -6,27 +6,28 @@
 
 <a asp-controller="Account" asp-action="CreateCategory" class="btn btn-primary">Create Category</a>
 <br />
-<br/>
+<br />
 
-<aside class="category-filter-container container">
+<aside class="category-filter-container container mb-4">
     <p>Filter categories:</p>
 
     <form asp-action="GetCategories" asp-controller="Account">
         <div class="row category-props-container">
-
-            <div class="col form-control">
+            <div class="col form-control" style="margin-left:1.15rem;">
                 <label asp-for="@Model.CategoryName">Category name:</label>
                 <input type="text" asp-for="@Model.CategoryName" />
                 <input type="hidden" asp-for="@Model.CategoryName" />
             </div>
 
-            <div class="col form-control">
+            <div class="col form-control" style="margin-left:1.15rem;">
                 <label asp-for="CategoryPriority">Category priority:</label>
                 <input type="text" asp-for="CategoryPriority" />
                 <input type="hidden" asp-for="CategoryPriority" />
             </div>
+            <div class="col" style="margin-left:1.15rem;">
+                <button type="submit" class="btn btn-outline-primary">Filter results</button>
+            </div>
         </div>
-        <button type="submit">Filter results</button>
     </form>
 </aside>
 
@@ -48,8 +49,8 @@
                     <td>@item.Name</td>
                     <td>@item.Priority</td>
                     <td>
-                        <a asp-action="CategoryDetails" 
-                           asp-controller="Account" 
+                        <a asp-action="CategoryDetails"
+                           asp-controller="Account"
                            asp-route-CategoryId="@item.Id"
                            class="btn btn-primary">Details</a>
                     </td>

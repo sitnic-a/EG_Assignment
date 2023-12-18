@@ -5,4 +5,7 @@
 
 document.addEventListener("DOMContentLoaded", (e) => {
     console.log("DOM fully loaded and parsed");
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
 });
