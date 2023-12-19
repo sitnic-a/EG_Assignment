@@ -2,6 +2,7 @@
 using ExordiumGames.MVC.Data.DbModels;
 using ExordiumGames.MVC.Dto.FilteringDto;
 using ExordiumGames.MVC.Utils.Extensions.CategoryExtension;
+using ExordiumGames.MVC.Utils.Extensions.RetailerExtension;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExordiumGames.MVC.Services
@@ -47,10 +48,18 @@ namespace ExordiumGames.MVC.Services
             return category != null ? category : new Category();
         }
 
-        public async Task<List<Retailer>> GetRetailers()
+        public async Task<List<Retailer>> GetRetailers(RetailerFilterDto? queryRetailer = null)
         {
-            var result = await _context.Retailers.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();
-            return result;
+            if (queryRetailer != null)
+            {
+                if (queryRetailer.RetailersAreNotFiltered() == true)
+                {
+                    var result = await _context.Retailers.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();
+                    return result;
+                }
+            }
+            var filteredCategories = await _userService.FilterRetailersAsync(queryRetailer);
+            return filteredCategories.ToList();
         }
 
         public async Task<Category> AddAsyncCategory(Category Entity)

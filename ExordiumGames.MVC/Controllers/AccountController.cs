@@ -104,7 +104,8 @@ namespace ExordiumGames.MVC.Controllers
 
         public async Task<IActionResult> UpdateCategory(int CategoryId, 
                                                         Category category, 
-                                                        CategoryFilterDto?queryCategory)
+                                                        CategoryFilterDto?queryCategory,
+                                                        RetailerFilterDto?queryRetailer)
         {
             var dbCategory = await _employeeService.GetCategoryById(CategoryId);
             var items = _employeeService.GetItems().Result.Where(c => c.CategoryId != CategoryId);
@@ -131,7 +132,7 @@ namespace ExordiumGames.MVC.Controllers
             }
 
             var categories = await _employeeService.GetCategories(queryCategory);
-            var retailers = await _employeeService.GetRetailers();
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
 
             ViewBag.Categories = categories.Select(i => new SelectListItem
             {
@@ -154,10 +155,10 @@ namespace ExordiumGames.MVC.Controllers
         }
 
 
-        public async Task<IActionResult> CreateItem(CategoryFilterDto?queryCategory)
+        public async Task<IActionResult> CreateItem(CategoryFilterDto?queryCategory, RetailerFilterDto?queryRetailer)
         {
             var categories = await _employeeService.GetCategories(queryCategory);
-            var retailers = await _employeeService.GetRetailers();
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
 
             ViewBag.Categories = categories.Select(i => new SelectListItem
             {
@@ -191,7 +192,7 @@ namespace ExordiumGames.MVC.Controllers
             return View(items);
         }
 
-        public async Task<IActionResult> UpdateItem(int ItemId, Item item, CategoryFilterDto?queryCategory)
+        public async Task<IActionResult> UpdateItem(int ItemId, Item item, CategoryFilterDto?queryCategory,RetailerFilterDto?queryRetailer)
         {
             var dbItem = await _employeeService.GetItem(ItemId);
             var updateModel = new CreateItemRequestModel(
@@ -205,7 +206,7 @@ namespace ExordiumGames.MVC.Controllers
                 dbItem.CategoryId);
 
             var categories = await _employeeService.GetCategories(queryCategory);
-            var retailers = await _employeeService.GetRetailers();
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
 
             ViewBag.Categories = categories.Select(i => new SelectListItem
             {
@@ -272,10 +273,11 @@ namespace ExordiumGames.MVC.Controllers
             return RedirectToAction(actionName: "GetRetailers");
         }
 
-        public async Task<IActionResult> GetRetailers()
+        public async Task<IActionResult> GetRetailers(RetailerFilterDto? queryRetailer = null)
         {
-            var retailers = await _employeeService.GetRetailers();
-            return View(retailers);
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
+            ViewBag.Retailers = retailers;
+            return View();
         }
 
         public async Task<IActionResult> RetailerDetails(int RetailerId)
@@ -308,7 +310,7 @@ namespace ExordiumGames.MVC.Controllers
             return View(retailerResponseModel);
         }
 
-        public async Task<IActionResult> UpdateRetailer(int RetailerId, CategoryFilterDto?queryCategory)
+        public async Task<IActionResult> UpdateRetailer(int RetailerId, CategoryFilterDto?queryCategory,RetailerFilterDto?queryRetailer)
         {
             var dbRetailer = await _employeeService.GetRetailerById(RetailerId);
             var items = _employeeService.GetItems().Result.Where(r => r.RetailerId != RetailerId);
@@ -334,7 +336,7 @@ namespace ExordiumGames.MVC.Controllers
                     false));
             }
 
-            var retailers = await _employeeService.GetRetailers();
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
             var categories = await _employeeService.GetCategories(queryCategory);
 
             ViewBag.Retailers = retailers.Select(r => new SelectListItem

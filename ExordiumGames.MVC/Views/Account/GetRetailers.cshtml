@@ -1,4 +1,8 @@
-﻿@model List<ExordiumGames.MVC.Data.DbModels.Retailer>
+﻿@model ExordiumGames.MVC.Dto.FilteringDto.RetailerFilterDto
+
+@{
+    var Retailers = ViewBag.Retailers;
+}
 
 <div class="container">
     
@@ -6,8 +10,32 @@
         <a class="btn btn-primary" asp-action="CreateRetailer" asp-controller="Account">Add New Retailer</a>
     </div>
     <br />
+
+    <aside class="category-filter-container container mb-4">
+        <p>Filter categories:</p>
+
+        <form asp-action="GetRetailers" asp-controller="Account">
+            <div class="row category-props-container">
+                <div class="col form-control" style="margin-left:1.15rem;">
+                    <label asp-for="@Model.RetailerName">Retailer name:</label>
+                    <input type="text" asp-for="@Model.RetailerName" />
+                    <input type="hidden" asp-for="@Model.RetailerName" />
+                </div>
+
+                <div class="col form-control" style="margin-left:1.15rem;">
+                    <label asp-for="@Model.RetailerPriority">Retailer priority:</label>
+                    <input type="text" asp-for="@Model.RetailerPriority" />
+                    <input type="hidden" asp-for="@Model.RetailerPriority" />
+                </div>
+                <div class="col" style="margin-left:1.15rem;">
+                    <button type="submit" class="btn btn-outline-primary">Filter results</button>
+                </div>
+            </div>
+        </form>
+    </aside>
+
     <section class="retailers-container">
-        @foreach (var item in Model)
+        @foreach (var item in Retailers)
         {
             <div class="form-control retailer">
                 <div>
