@@ -19,7 +19,7 @@ namespace ExordiumGames.MVC.Services
         Task<TItem> DeleteAsyncItem(int id);
         Task<TItem> UpdateAsyncItem(int id, TItem Entity);
 
-        Task<List<TRetailer>> GetRetailers();
+        Task<List<TRetailer>> GetRetailers(RetailerFilterDto?queryRetailer);
         Task<TRetailer> GetRetailerById(int id);
         Task<TRetailer> AddAsyncRetailer(TRetailer Entity);
         Task<TRetailer> DeleteAsyncRetailer(int id);

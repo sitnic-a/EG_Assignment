@@ -2,6 +2,7 @@
 using ExordiumGames.MVC.Data.DbModels;
 using ExordiumGames.MVC.Dto.FilteringDto;
 using ExordiumGames.MVC.Utils.Extensions.CategoryExtension;
+using ExordiumGames.MVC.Utils.Extensions.RetailerExtension;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExordiumGames.MVC.Services
@@ -11,6 +12,7 @@ namespace ExordiumGames.MVC.Services
         private readonly ApplicationDbContext _context;
         private readonly ILogger<UserService> _userLogger;
         private readonly IEnumerable<Category> _dbCategories;
+        private readonly IEnumerable<Retailer> _dbRetailers;
         public UserService(ApplicationDbContext context,
             ILogger<UserService> userLogger)
         {
@@ -18,6 +20,9 @@ namespace ExordiumGames.MVC.Services
             _userLogger = userLogger;
             _dbCategories = _context.Categories
                             .Where(c => !String.IsNullOrEmpty(c.Name) || !String.IsNullOrWhiteSpace(c.Name))
+                            .Include(i => i.Items);
+            _dbRetailers = _context.Retailers
+                            .Where(r => !String.IsNullOrEmpty(r.Name) || !String.IsNullOrWhiteSpace(r.Name))
                             .Include(i => i.Items);
         }
         public async Task<IEnumerable<Category>> FilterCategoriesAsync(CategoryFilterDto? queryCategory)
@@ -61,9 +66,45 @@ namespace ExordiumGames.MVC.Services
             return _dbCategories;
         }
 
-        public Task<IEnumerable<Retailer>> FilterRetailersAsync(RetailerFilterDto? queryRetailer)
+        public async Task<IEnumerable<Retailer>> FilterRetailersAsync(RetailerFilterDto? queryRetailer)
         {
-            throw new NotImplementedException();
+            IEnumerable<Retailer> filteredItems = new List<Retailer>();
+            List<Retailer> retailers = new List<Retailer>();
+
+            if (_dbRetailers.Count() <= 0)
+            {
+                return new List<Retailer>();
+            }
+
+            if (queryRetailer != null)
+            {
+                if (queryRetailer.RetailersAreNotFiltered() == true)
+                {
+                    return _dbRetailers;
+                }
+
+                if (!String.IsNullOrEmpty(queryRetailer.RetailerName) ||
+                !String.IsNullOrWhiteSpace(queryRetailer.RetailerName))
+                {
+
+                    filteredItems = _dbRetailers
+                        .Where(c => c.Name.StartsWith(queryRetailer.RetailerName) ||
+                                c.Name.EndsWith(queryRetailer.RetailerName) ||
+                                c.Name.Equals(queryRetailer.RetailerName));
+                    retailers.AddRange(filteredItems);
+                }
+
+                if (queryRetailer.RetailerPriority > 0)
+                {
+                    filteredItems = _dbRetailers
+                        .Where(p => p.Priority == queryRetailer.RetailerPriority);
+                    retailers.AddRange(filteredItems);
+                }
+
+                return retailers;
+            }
+
+            return _dbRetailers;
         }
     }
 }

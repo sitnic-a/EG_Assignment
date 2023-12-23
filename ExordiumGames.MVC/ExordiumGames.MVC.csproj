@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\Extensions\NewFolder\**" />
     <Compile Remove="Views\Account\Admin\**" />
+    <Content Remove="Utils\Extensions\NewFolder\**" />
     <Content Remove="Views\Account\Admin\**" />
+    <EmbeddedResource Remove="Utils\Extensions\NewFolder\**" />
     <EmbeddedResource Remove="Views\Account\Admin\**" />
+    <None Remove="Utils\Extensions\NewFolder\**" />
     <None Remove="Views\Account\Admin\**" />
   </ItemGroup>
 
