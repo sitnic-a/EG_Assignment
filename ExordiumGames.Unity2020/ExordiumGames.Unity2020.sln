@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{171762D9-C58A-FAFD-9E73-B2D5004ADC2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExordiumGames.Certificates.Console", "..\ExordiumGames.Certificates.Console\ExordiumGames.Certificates.Console.csproj", "{4EE5DC68-F697-420D-85B0-D262ABDF6119}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +17,10 @@ Global
 		{171762D9-C58A-FAFD-9E73-B2D5004ADC2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{171762D9-C58A-FAFD-9E73-B2D5004ADC2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{171762D9-C58A-FAFD-9E73-B2D5004ADC2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EE5DC68-F697-420D-85B0-D262ABDF6119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EE5DC68-F697-420D-85B0-D262ABDF6119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EE5DC68-F697-420D-85B0-D262ABDF6119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EE5DC68-F697-420D-85B0-D262ABDF6119}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
