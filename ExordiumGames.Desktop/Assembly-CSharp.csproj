@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\ItemScript.cs" />
     <Compile Include="Assets\Models\Retailer.cs" />
     <Compile Include="Assets\Models\SerializationModels\JsonItems.cs" />
+    <Compile Include="Assets\Scripts\ItemsDisplayScript.cs" />
     <Compile Include="Assets\Models\UnityCertificateHandler.cs" />
     <Compile Include="Assets\Models\Item.cs" />
   </ItemGroup>

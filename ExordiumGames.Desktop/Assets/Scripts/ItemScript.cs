@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Assets.Models;
 using ExordiumGames.MVC.Data.DbModels;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 public class ItemScript : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class ItemScript : MonoBehaviour
     public void GetItems()
     {
         StartCoroutine(CallGetItems("https://localhost:7029/api/unity/items"));
+        SceneManager.LoadScene("Items");
     }
 
     public IEnumerator CallGetItems(string url)
@@ -40,4 +43,6 @@ public class ItemScript : MonoBehaviour
             }
         }
     }
+
+    
 }
