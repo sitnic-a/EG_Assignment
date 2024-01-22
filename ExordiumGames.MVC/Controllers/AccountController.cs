@@ -1,33 +1,40 @@
 ﻿using ExordiumGames.MVC.Data.DbModels;
 using ExordiumGames.MVC.Dto;
+using ExordiumGames.MVC.Dto.FilteringDto;
 using ExordiumGames.MVC.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace ExordiumGames.MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IEmployeeService<Category, Item, Retailer> _employeeService;
         private readonly IAdminService _adminService;
+        private readonly IEmployeeService<Category, Item, Retailer> _employeeService;
+        private readonly IUserService<CategoryFilterDto, RetailerFilterDto> _userService;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountController(IEmployeeService<Category, Item, Retailer> employeeService,
-            IAdminService adminService,
+        public AccountController(IAdminService adminService,
+            IEmployeeService<Category, Item, Retailer> employeeService,
+            IUserService<CategoryFilterDto,RetailerFilterDto> userService,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<User> signInManager)
         {
-            _employeeService = employeeService;
             _adminService = adminService;
+            _employeeService = employeeService;
+            _userService = userService;
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+        }
+        public IActionResult Dashboard()
+        {
+            return View();
         }
 
         #region Employee
@@ -35,7 +42,6 @@ namespace ExordiumGames.MVC.Controllers
         {
             return View();
         }
-
         public async Task<IActionResult> SaveCategory(int CategoryId, CategoryResponseModel categoryRequestModel)
         {
             if (CategoryId > 0)
@@ -79,10 +85,11 @@ namespace ExordiumGames.MVC.Controllers
             return RedirectToAction(actionName: "GetCategories");
         }
 
-        public async Task<IActionResult> GetCategories()
+        public async Task<IActionResult> GetCategories(CategoryFilterDto?queryCategory=null)
         {
-            var categories = await _employeeService.GetCategories();
-            return View(categories);
+            var categories = await _employeeService.GetCategories(queryCategory);
+            ViewBag.Categories = categories;
+            return View();
         }
 
         public async Task<IActionResult> CategoryDetails(int CategoryId)
@@ -95,7 +102,10 @@ namespace ExordiumGames.MVC.Controllers
             return View(category);
         }
 
-        public async Task<IActionResult> UpdateCategory(int CategoryId, Category category)
+        public async Task<IActionResult> UpdateCategory(int CategoryId, 
+                                                        Category category, 
+                                                        CategoryFilterDto?queryCategory,
+                                                        RetailerFilterDto?queryRetailer)
         {
             var dbCategory = await _employeeService.GetCategoryById(CategoryId);
             var items = _employeeService.GetItems().Result.Where(c => c.CategoryId != CategoryId);
@@ -121,8 +131,8 @@ namespace ExordiumGames.MVC.Controllers
                 });
             }
 
-            var categories = await _employeeService.GetCategories();
-            var retailers = await _employeeService.GetRetailers();
+            var categories = await _employeeService.GetCategories(queryCategory);
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
 
             ViewBag.Categories = categories.Select(i => new SelectListItem
             {
@@ -145,10 +155,10 @@ namespace ExordiumGames.MVC.Controllers
         }
 
 
-        public async Task<IActionResult> CreateItem()
+        public async Task<IActionResult> CreateItem(CategoryFilterDto?queryCategory, RetailerFilterDto?queryRetailer)
         {
-            var categories = await _employeeService.GetCategories();
-            var retailers = await _employeeService.GetRetailers();
+            var categories = await _employeeService.GetCategories(queryCategory);
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
 
             ViewBag.Categories = categories.Select(i => new SelectListItem
             {
@@ -182,7 +192,7 @@ namespace ExordiumGames.MVC.Controllers
             return View(items);
         }
 
-        public async Task<IActionResult> UpdateItem(int ItemId, Item item)
+        public async Task<IActionResult> UpdateItem(int ItemId, Item item, CategoryFilterDto?queryCategory,RetailerFilterDto?queryRetailer)
         {
             var dbItem = await _employeeService.GetItem(ItemId);
             var updateModel = new CreateItemRequestModel(
@@ -195,8 +205,8 @@ namespace ExordiumGames.MVC.Controllers
                 dbItem.RetailerId.Value,
                 dbItem.CategoryId);
 
-            var categories = await _employeeService.GetCategories();
-            var retailers = await _employeeService.GetRetailers();
+            var categories = await _employeeService.GetCategories(queryCategory);
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
 
             ViewBag.Categories = categories.Select(i => new SelectListItem
             {
@@ -263,10 +273,11 @@ namespace ExordiumGames.MVC.Controllers
             return RedirectToAction(actionName: "GetRetailers");
         }
 
-        public async Task<IActionResult> GetRetailers()
+        public async Task<IActionResult> GetRetailers(RetailerFilterDto? queryRetailer = null)
         {
-            var retailers = await _employeeService.GetRetailers();
-            return View(retailers);
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
+            ViewBag.Retailers = retailers;
+            return View();
         }
 
         public async Task<IActionResult> RetailerDetails(int RetailerId)
@@ -299,7 +310,7 @@ namespace ExordiumGames.MVC.Controllers
             return View(retailerResponseModel);
         }
 
-        public async Task<IActionResult> UpdateRetailer(int RetailerId)
+        public async Task<IActionResult> UpdateRetailer(int RetailerId, CategoryFilterDto?queryCategory,RetailerFilterDto?queryRetailer)
         {
             var dbRetailer = await _employeeService.GetRetailerById(RetailerId);
             var items = _employeeService.GetItems().Result.Where(r => r.RetailerId != RetailerId);
@@ -325,8 +336,8 @@ namespace ExordiumGames.MVC.Controllers
                     false));
             }
 
-            var retailers = await _employeeService.GetRetailers();
-            var categories = await _employeeService.GetCategories();
+            var retailers = await _employeeService.GetRetailers(queryRetailer);
+            var categories = await _employeeService.GetCategories(queryCategory);
 
             ViewBag.Retailers = retailers.Select(r => new SelectListItem
             {
@@ -350,10 +361,7 @@ namespace ExordiumGames.MVC.Controllers
 
         #endregion
 
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
+        #region Admin
 
         public IActionResult CreateUser()
         {
@@ -433,7 +441,8 @@ namespace ExordiumGames.MVC.Controllers
 
         public async Task<IActionResult> UpdateUserRoles(string UserId, UserDto updateUserRoles)
         {
-            var updatedRolesCount = updateUserRoles.Roles.Where(r => r.CheckedItem == true).Count();
+            var updatedRoles = updateUserRoles.Roles.Where(r => r.CheckedItem == true);
+            var updatedRolesCount = updatedRoles.Count();
             var user = await _adminService.GetById(UserId);
             var roles = await _userManager.GetRolesAsync(user);
 
@@ -449,7 +458,7 @@ namespace ExordiumGames.MVC.Controllers
 
             for (int i = 0; i < updatedRolesCount; i++)
             {
-                var role = updateUserRoles.Roles[i].Name;
+                var role = updatedRoles.ElementAt(i).Name;
                 await _userManager.AddToRoleAsync(user, role);
             }
 
@@ -483,12 +492,12 @@ namespace ExordiumGames.MVC.Controllers
             return RedirectToAction(actionName: "Dashboard");
         }
 
-
-
         public async Task<IActionResult> DeleteUserById(string UserId)
         {
             var removedUser = await _adminService.DeleteById(UserId);
             return RedirectToAction(actionName: "GetUsers");
         }
+
+        #endregion
     }
 }

@@ -1,12 +1,9 @@
 ﻿using ExordiumGames.MVC.Data;
 using ExordiumGames.MVC.Data.DbModels;
+using ExordiumGames.MVC.Dto.FilteringDto;
 using ExordiumGames.MVC.Services;
-using ExordiumGames.MVC.Utils.Parsers;
-using ExordiumGames.MVC.Utils.Parsers.XMLModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +16,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //Custom services
 builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IEmployeeService<Category, Item, Retailer>, EmployeeService>();
+builder.Services.AddTransient<IUserService<CategoryFilterDto,RetailerFilterDto>, UserService>();
 builder.Services.AddTransient<IPopulateDBService, PopulateDBService>();
 
 builder.Services.AddIdentity<User, IdentityRole>()

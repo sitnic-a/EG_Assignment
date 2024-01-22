@@ -1,20 +1,24 @@
 ﻿using ExordiumGames.MVC.Data;
 using ExordiumGames.MVC.Data.DbModels;
-using ExordiumGames.MVC.Dto;
+using ExordiumGames.MVC.Dto.FilteringDto;
+using ExordiumGames.MVC.Utils.Extensions.CategoryExtension;
+using ExordiumGames.MVC.Utils.Extensions.RetailerExtension;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ExordiumGames.MVC.Services
 {
     public class EmployeeService : IEmployeeService<Category, Item, Retailer>
     {
         private readonly ApplicationDbContext _context;
+        private readonly IUserService<CategoryFilterDto, RetailerFilterDto> _userService;
         private readonly ILogger<EmployeeService> _employeeLogger;
 
-        public EmployeeService(ApplicationDbContext context, ILogger<EmployeeService> employeeLogger)
+        public EmployeeService(ApplicationDbContext context,
+            IUserService<CategoryFilterDto, RetailerFilterDto> userService,
+            ILogger<EmployeeService> employeeLogger)
         {
             _context = context;
+            _userService = userService;
             _employeeLogger = employeeLogger;
         }
 
@@ -24,10 +28,18 @@ namespace ExordiumGames.MVC.Services
             return result;
         }
 
-        public async Task<List<Category>> GetCategories()
+        public async Task<List<Category>> GetCategories(CategoryFilterDto queryCategory)
         {
-            var result = await _context.Categories.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();
-            return result;
+            if (queryCategory != null)
+            {
+                if (queryCategory.CategoriesAreNotFiltered() == true)
+                {
+                    var result = await _context.Categories.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();
+                    return result;
+                }
+            }
+            var filteredCategories = await _userService.FilterCategoriesAsync(queryCategory);
+            return filteredCategories.ToList();
         }
 
         public async Task<Category> GetCategoryById(int id)
@@ -36,10 +48,18 @@ namespace ExordiumGames.MVC.Services
             return category != null ? category : new Category();
         }
 
-        public async Task<List<Retailer>> GetRetailers()
+        public async Task<List<Retailer>> GetRetailers(RetailerFilterDto? queryRetailer = null)
         {
-            var result = await _context.Retailers.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();
-            return result;
+            if (queryRetailer != null)
+            {
+                if (queryRetailer.RetailersAreNotFiltered() == true)
+                {
+                    var result = await _context.Retailers.Where(n => !String.IsNullOrEmpty(n.Name)).ToListAsync();
+                    return result;
+                }
+            }
+            var filteredCategories = await _userService.FilterRetailersAsync(queryRetailer);
+            return filteredCategories.ToList();
         }
 
         public async Task<Category> AddAsyncCategory(Category Entity)
