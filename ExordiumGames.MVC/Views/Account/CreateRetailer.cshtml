@@ -1,0 +1,24 @@
+﻿@model ExordiumGames.MVC.Dto.RetailerRequestModel
+
+<section class="container">
+    <form asp-action="SaveRetailer" asp-controller="Account">
+        <div class="container">
+            <div class="form-control">
+                <label for="Name">Retailer name:</label>
+                <input type="text" asp-for="Name" class="form-control" />
+                <input type="hidden" asp-for="Name" />
+            </div>
+            <div class="form-control">
+                <label for="Priority">Retailer priority:</label>
+                <input type="text" asp-for="Priority" class="form-control"/>
+                <input type="hidden" asp-for="Priority" />
+            </div>
+            <div class="form-control">
+                <label for="LogoImage">Image URL:</label>
+                <input type="text" asp-for="@Model.LogoImage" class="form-control" />
+                <input type="hidden" asp-for="LogoImage" />
+            </div>
+            </div>
+            <button type="submit">Save</button>
+    </form>
+</section>

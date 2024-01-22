@@ -1,0 +1,23 @@
+﻿@using ExordiumGames.MVC.Data.DbModels;
+@using ExordiumGames.MVC.Dto;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-action="SignUserOut" asp-controller="Account">Logout</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-action="CreateUser" asp-controller="Account">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-action="Login" asp-controller="Account">Login</a>
+        </li>
+    }
+</ul>

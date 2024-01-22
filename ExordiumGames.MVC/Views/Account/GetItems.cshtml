@@ -1,0 +1,23 @@
+﻿@model List<ExordiumGames.MVC.Data.DbModels.Item>
+
+<a asp-controller="Account" asp-action="CreateItem" class="btn btn-primary">Add New Item</a>
+<br />
+<section class="get-items-section">
+    @foreach (var item in Model)
+    {
+        <div class="item-container form-control">
+            <div class="item-details">
+                <p>Name: @item.Name</p>
+                <p>@item.Description</p>
+                <p>@item.DiscountDate</p>
+                <div>@item.Price</div>
+            </div>
+            <img src="@item.ImageUrl" />
+            <div>
+                <a asp-action="DeleteItem" asp-controller="Account" asp-route-ItemId="@item.Id" class="btn btn-danger">Delete Item</a>
+                <a asp-action="UpdateItem" asp-controller="Account" asp-route-ItemId="@item.Id" class="btn btn-outline-primary">Update Item</a>
+            </div>
+        </div>
+        <br />
+    }
+</section>

@@ -1,0 +1,48 @@
+﻿@model List<ExordiumGames.MVC.Dto.UserDto>
+
+
+<section class="container users-roles-container">
+    <a class="btn btn-primary" asp-action="CreateUser" asp-controller="Account">Add User</a>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Title</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="user-roles-row">
+                    <td>@item.Username</td>
+                    <td>@item.Email</td>
+                    <td>@item.Title</td>
+                    <td>
+                        @foreach (var role in item.Roles)
+                        {
+                            <div class="form-control role-row">@role.Name</div>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-primary"
+                           asp-action="UserDetails"
+                           asp-controller="Account"
+                           asp-route-UserId="@item.UserId">Update</a>
+                    </td>
+                    @if (!item.Roles.Any(s => s.Name == "Admin"))
+                    {
+                        <td>
+                            <a class="btn btn-danger"
+                               asp-action="DeleteUserById"
+                               asp-controller="Account"
+                               asp-route-UserId="@item.UserId">Delete</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

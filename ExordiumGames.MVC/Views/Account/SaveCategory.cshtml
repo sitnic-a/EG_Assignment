@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "SaveCategory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <script src="/js/site.js"></script>
+
+}
+
+@model ExordiumGames.MVC.Data.DbModels.Category
+
+@foreach (var item in Model.Items)
+{
+    <h1>@item.Name of price @item.Price</h1>
+    <section>
+        <h2>@item.DiscountDate</h2>
+        <p>@item.Description</p>
+        <p>Category: @item.CategoryId</p>
+        <p>Retailer: @item.RetailerId</p>
+    </section>
+    <br />
+}
